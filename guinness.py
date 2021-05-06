@@ -261,7 +261,7 @@ class CUINNESS:
         global img_siz
         
         #subprocess.Popen(["time",python,"train.py","-g",gpu,"--iter",str(n_iter),"--dim",str(n_dim),"--siz",str(img_siz),"--dataset",train_dataset,"--label",label_dataset,"--optimizer",optimizer_alg,"--prefix",project_name,"--lr_decay_iter","100","--resume",resume,"--batch_size",batch_size]) # background job = python train.py &
-        subprocess.run(["time",python,"train.py","-g",gpu,"--iter",str(n_iter),"--dim",str(n_dim),"--siz",str(img_siz),"--dataset",train_dataset,"--label",label_dataset,"--optimizer",optimizer_alg,"--prefix",project_name,"--lr_decay_iter","100","--resume",resume,"--batch_size",batch_size]) # background job = python train.py &
+        subprocess.run([python,"train.py","-g",gpu,"--iter",str(n_iter),"--dim",str(n_dim),"--siz",str(img_siz),"--dataset",train_dataset,"--label",label_dataset,"--optimizer",optimizer_alg,"--prefix",project_name,"--lr_decay_iter","100","--resume",resume,"--batch_size",batch_size]) # background job = python train.py &
 
         # set process file
         with open("train_status.txt","w") as f:
