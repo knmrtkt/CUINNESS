@@ -9,7 +9,8 @@ from chainer.utils import conv
 from chainer.utils import type_check
 
 def _kern():
-    return cuda.elementwise(
+    #return cuda.elementwise(
+    return cupy.elementwise(
         'T x', 'T y',
         'y = x >= 0 ? 1 : -1',
         'binarize')
