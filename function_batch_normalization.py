@@ -172,7 +172,8 @@ class BatchNormalizationFunction(function.Function):
                 y += beta
 
             else:
-                self.x_hat, y = cuda.elementwise(
+                #self.x_hat, y = cuda.elementwise(
+                self.x_hat, y = cupy.ElementwiseKernel(
                     'T x, T mean, T std, T gamma, T beta', 'T x_hat, T y',
                     '''
                     x_hat = (x - mean) / std;
