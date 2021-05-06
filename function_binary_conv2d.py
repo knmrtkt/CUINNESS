@@ -203,7 +203,8 @@ class BinaryConv2DFunction(function.Function):
 
         kh, kw = W.shape[2:]
 
-        gW = cuda.cupy.empty_like(W)
+        #gW = cuda.cupy.empty_like(W)
+        gW = cupy.empty_like(W)
         if (self.cover_all and cuda.cudnn_enabled and self.use_cudnn and
                 _check_cudnn_acceptable_type(x.dtype, W.dtype)):
             x = cuda.cupy.ascontiguousarray(x)
