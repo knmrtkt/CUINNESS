@@ -109,14 +109,14 @@ class BinaryConv2DFunction(function.Function):
         out_w = conv.get_conv_outsize(w, kw, self.sx, self.pw,
                                       cover_all=self.cover_all)
 
-        #y = cuda.cupy.empty((n, out_c, out_h, out_w), dtype=x.dtype)
+        #y = cupy.empty((n, out_c, out_h, out_w), dtype=x.dtype)
         y = cupy.empty((n, out_c, out_h, out_w), dtype=x.dtype)
         if (self.cover_all and cuda.cudnn_enabled and self.use_cudnn and
                 _check_cudnn_acceptable_type(x.dtype, W.dtype)):
-            x = cuda.cupy.ascontiguousarray(x)
-            W = cuda.cupy.ascontiguousarray(W)
+            x = cupy.ascontiguousarray(x)
+            W = cupy.ascontiguousarray(W)
             if b is not None:
-                b = cuda.cupy.ascontiguousarray(b)
+                b = cupy.ascontiguousarray(b)
 
             handle = cudnn.get_handle()
             x_desc = cudnn.create_tensor_descriptor(x)
@@ -130,7 +130,7 @@ class BinaryConv2DFunction(function.Function):
                     b[None, :, None, None])
 
             workspace_size = cuda.get_max_workspace_size()
-            workspace = cuda.cupy.empty((workspace_size,), dtype='b')
+            workspace = cupy.empty((workspace_size,), dtype='b')
             algo = libcudnn.getConvolutionForwardAlgorithm(
                 handle, x_desc.value, self.filter_desc.value,
                 self.conv_desc.value, y_desc.value, _fwd_pref,
@@ -203,13 +203,13 @@ class BinaryConv2DFunction(function.Function):
 
         kh, kw = W.shape[2:]
 
-        #gW = cuda.cupy.empty_like(W)
+        #gW = cupy.empty_like(W)
         gW = cupy.empty_like(W)
         if (self.cover_all and cuda.cudnn_enabled and self.use_cudnn and
                 _check_cudnn_acceptable_type(x.dtype, W.dtype)):
-            x = cuda.cupy.ascontiguousarray(x)
-            W = cuda.cupy.ascontiguousarray(W)
-            gy = cuda.cupy.ascontiguousarray(gy)
+            x = cupy.ascontiguousarray(x)
+            W = cupy.ascontiguousarray(W)
+            gy = cupy.ascontiguousarray(gy)
 
             handle = cudnn.get_handle()
             x_desc = cudnn.create_tensor_descriptor(x)
@@ -217,11 +217,11 @@ class BinaryConv2DFunction(function.Function):
             oz_dtype = 'd' if x.dtype == 'd' else 'f'
             one = numpy.array(1, dtype=oz_dtype).ctypes
             zero = numpy.array(0, dtype=oz_dtype).ctypes
-            gx = cuda.cupy.empty_like(x)
+            gx = cupy.empty_like(x)
 
             if _cudnn_version >= 4000:
                 workspace_size = cuda.get_max_workspace_size()
-                workspace = cuda.cupy.empty((workspace_size,), dtype='b')
+                workspace = cupy.empty((workspace_size,), dtype='b')
 
                 algo = libcudnn.getConvolutionBackwardFilterAlgorithm(
                     handle, x_desc.value, gy_desc.value,
@@ -253,7 +253,7 @@ class BinaryConv2DFunction(function.Function):
                     zero.data, x_desc.value, gx.data.ptr)
 
             if b is not None:
-                gb = cuda.cupy.empty_like(b)
+                gb = cupy.empty_like(b)
                 libcudnn.convolutionBackwardBias(
                     handle, one.data, gy_desc.value, gy.data.ptr,
                     zero.data, self.bias_desc.value, gb.data.ptr)
@@ -264,16 +264,16 @@ class BinaryConv2DFunction(function.Function):
             # TODO(beam2d): Use streams or batch gemm
             gW_mat[...] = 0
             for i in moves.range(n):
-                gW_mat += cuda.cupy.dot(gy_mats[i], col_mats[i].T)
+                gW_mat += cupy.dot(gy_mats[i], col_mats[i].T)
 
             W_mat = W.reshape(out_c, -1)
             Wb_mat = _kern()(W_mat)
 
-            gcol = cuda.cupy.empty_like(self.col)
+            gcol = cupy.empty_like(self.col)
             gcol_mats = gcol.reshape(n, c * kh * kw, out_h * out_w)
 
             for i in moves.range(n):
-                gcol_mats[i] = cuda.cupy.dot(Wb_mat.T, gy_mats[i])
+                gcol_mats[i] = cupy.dot(Wb_mat.T, gy_mats[i])
 
             gx = conv.col2im_gpu(
                 gcol, self.sy, self.sx, self.ph, self.pw, h, w)
