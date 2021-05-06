@@ -99,8 +99,10 @@ class CifarTrainer(object):
 
     def __forward(self, batch_x, batch_t, train=True):
         xp = self.xp
-        x = Variable(xp.asarray(batch_x), volatile=not train)
-        t = Variable(xp.asarray(batch_t), volatile=not train)
+        # x = Variable(xp.asarray(batch_x), volatile=not train)
+        # t = Variable(xp.asarray(batch_t), volatile=not train)
+        x = Variable(xp.asarray(batch_x))
+        t = Variable(xp.asarray(batch_t))
         y = self.net(x, train=train)
 #        print(type(y.data))
 #        print(type(t.data))
