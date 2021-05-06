@@ -1,5 +1,6 @@
 import math
 
+import chainer
 import function_binary_conv2d
 from chainer import initializers
 from chainer import link
@@ -70,8 +71,9 @@ class Convolution2D(link.Link):
         #self.add_param('W', W_shape)
         # For backward compatibility, the scale of weights is proportional to
         # the square root of wscale.
-        initializers.init_weight(self.W.data, self.initialW,
-                                 scale=math.sqrt(self.wscale))
+        # initializers.init_weight(self.W.data, self.initialW,
+        #                          scale=math.sqrt(self.wscale))
+        self.W = chainer.Parameter(self.initialW, W_shape, scale=math.sqrt(self.wscale))
 
         if nobias:
             self.b = None
@@ -79,7 +81,8 @@ class Convolution2D(link.Link):
             self.add_param('b', out_channels)
             if initial_bias is None:
                 initial_bias = bias
-            initializers.init_weight(self.b.data, initial_bias)
+            #initializers.init_weight(self.b.data, initial_bias)
+            self.b = chainer.Parameter(initial_bias, (1,))
 
     def _initialize_params(self, in_channels):
         kh, kw = _pair(self.ksize)
@@ -87,8 +90,9 @@ class Convolution2D(link.Link):
         self.add_param('W', W_shape)
         # For backward compatibility, the scale of weights is proportional to
         # the square root of wscale.
-        initializers.init_weight(self.W.data, self.initialW,
-                                 scale=math.sqrt(self.wscale))
+        # initializers.init_weight(self.W.data, self.initialW,
+        #                          scale=math.sqrt(self.wscale))
+        self.W = chainer.Parameter(self.initialW, W_shape, scale=math.sqrt(self.wscale))
 
     def __call__(self, x):
         """Applies the convolution layer.

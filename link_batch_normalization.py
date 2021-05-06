@@ -3,6 +3,7 @@
 
 import numpy
 
+import chainer
 from chainer.functions.normalization import batch_normalization
 from chainer import initializers
 from chainer import link
