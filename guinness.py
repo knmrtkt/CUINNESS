@@ -141,7 +141,8 @@ class CUINNESS:
                 bn_idx += 1
             
             if i == len(self.table) - 1:
-                pcode += '\n        )\n'
+                #pcode += '\n        )\n'
+                pcode += '\n'
             else:
                 if itm1 == 'Max Pool' or itm1 == 'Ave Pool':
                     pass
