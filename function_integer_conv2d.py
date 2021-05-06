@@ -1,7 +1,8 @@
 import numpy
 from six import moves
 
-from chainer import cupy.cuda
+from cupy import cuda
+#from chainer import cupy.cuda
 from chainer import function
 from chainer.utils import conv
 from chainer.utils import type_check
