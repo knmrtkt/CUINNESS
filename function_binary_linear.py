@@ -29,7 +29,8 @@ class BinaryLinearFunction(function.Function):
             w_type.ndim == 2,
             type_check.prod(x_type.shape[1:]) == w_type.shape[1],
         )
-        if n_in.eval() == 3:
+        #if n_in.eval() == 3:
+        if n_in == 3:
             b_type = in_types[2]
             type_check.expect(
                 b_type.dtype == numpy.float32,

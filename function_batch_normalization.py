@@ -43,7 +43,8 @@ class BatchNormalizationFunction(function.Function):
         self.decay = decay
 
     def check_type_forward(self, in_types):
-        n_in = in_types.size().eval()
+        #n_in = in_types.size().eval()
+        n_in = in_types.size()
         if n_in != 3 and n_in != 5:
             raise type_check.InvalidType(
                 '%s or %s' % (in_types.size() == 3, in_types.size() == 5),
