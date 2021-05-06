@@ -21,5 +21,4 @@ import link_batch_normalization as LBN
 
 class CNN(chainer.Chain):
     def __init__(self):
-        super(CNN, self).__init__()
-        with self.init_scope():
+        super(CNN, self).__init__(

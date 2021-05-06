@@ -115,13 +115,17 @@ class CUINNESS:
             val3 = int(self.table[i][3])
             
             if itm1 == 'Conv(Int)':
-                pcode += '            conv%d=IC.Convolution2D(%d,%d,3, stride=1, pad=1, nobias=True),\n' % (conv_idx,val1,val2)
-                pcode += '            b%d=L.BatchNormalization(%d)' % (bn_idx,val2)
+                #pcode += '            conv%d=IC.Convolution2D(%d,%d,3, stride=1, pad=1, nobias=True),\n' % (conv_idx,val1,val2)
+                #pcode += '            b%d=L.BatchNormalization(%d)' % (bn_idx,val2)
+                pcode += '            self.conv%d=IC.Convolution2D(%d,%d,3, stride=1, pad=1, nobias=True)\n' % (conv_idx,val1,val2)
+                pcode += '            self.b%d=L.BatchNormalization(%d)' % (bn_idx,val2)
                 conv_idx += 1
                 bn_idx += 1
             elif itm1 == 'Conv(Bin)':
-                pcode += '            conv%d=BC.Convolution2D(%d,%d,3, stride=1, pad=1, nobias=True),\n' % (conv_idx,val1,val2)
-                pcode += '            b%d=L.BatchNormalization(%d)' % (bn_idx,val2)
+                #pcode += '            conv%d=BC.Convolution2D(%d,%d,3, stride=1, pad=1, nobias=True),\n' % (conv_idx,val1,val2)
+                #pcode += '            b%d=L.BatchNormalization(%d)' % (bn_idx,val2)
+                pcode += '            self.conv%d=BC.Convolution2D(%d,%d,3, stride=1, pad=1, nobias=True)\n' % (conv_idx,val1,val2)
+                pcode += '            self.b%d=L.BatchNormalization(%d)' % (bn_idx,val2)
                 conv_idx += 1
                 bn_idx += 1
             elif itm1 == 'Max Pool':
@@ -129,8 +133,10 @@ class CUINNESS:
             elif itm1 == 'Ave Pool':
                 pass
             else: # Dense
-                pcode += '            fc%d=BL.BinaryLinear(%d,%d),\n' % (dense_idx,val1,val2)
-                pcode += '            b%d=L.BatchNormalization(%d)' % (bn_idx,val2)
+                #pcode += '            fc%d=BL.BinaryLinear(%d,%d),\n' % (dense_idx,val1,val2)
+                #pcode += '            b%d=L.BatchNormalization(%d)' % (bn_idx,val2)
+                pcode += '            self.fc%d=BL.BinaryLinear(%d,%d)\n' % (dense_idx,val1,val2)
+                pcode += '            self.b%d=L.BatchNormalization(%d)' % (bn_idx,val2)
                 dense_idx += 1
                 bn_idx += 1
             
@@ -140,7 +146,8 @@ class CUINNESS:
                 if itm1 == 'Max Pool' or itm1 == 'Ave Pool':
                     pass
                 else:
-                    pcode += ',\n'
+                    #pcode += ',\n'
+                    pcode += '\n'
 
 
         pcode += '\n    def __call__(self, x, train):\n'
