@@ -1,5 +1,6 @@
 import numpy
 
+import cupy
 from cupy import cuda
 #from chainer import cupy.cuda
 from chainer import function

@@ -9,11 +9,15 @@ from chainer.utils import conv
 from chainer.utils import type_check
 
 def _kern():
-    #return cuda.elementwise(
-    return cupy.ElementwiseKernel(
+    # return cuda.elementwise(
+    #     'T x', 'T y',
+    #     'y = x >= 0 ? 1 : -1',
+    #     'binarize')
+    ret = cupy.ElementwiseKernel(
         'T x', 'T y',
-        'y = x >= 0 ? 1 : -1',
-        'binarize')
+         'y = x >= 0 ? 1 : -1',
+         'binarize')
+    return ret
 
 def _as_mat(x):
     if x.ndim == 2:
