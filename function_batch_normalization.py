@@ -115,9 +115,9 @@ class BatchNormalizationFunction(function.Function):
                 # for linear layer
                 self.mode = libcudnn.CUDNN_BATCHNORM_PER_ACTIVATION
 
-            x = cuda.cupy.ascontiguousarray(x)
-            gamma = cuda.cupy.ascontiguousarray(gamma)
-            beta = cuda.cupy.ascontiguousarray(beta)
+            x = cupy.ascontiguousarray(x)
+            gamma = cupy.ascontiguousarray(gamma)
+            beta = cupy.ascontiguousarray(beta)
             dtype = x.dtype
             handle = cudnn.get_handle()
             x_desc = cudnn.create_tensor_descriptor(_as4darray(x))
@@ -126,7 +126,7 @@ class BatchNormalizationFunction(function.Function):
                                               x_desc.value, self.mode)
             one = numpy.array(1, dtype=dtype).ctypes
             zero = numpy.array(0, dtype=dtype).ctypes
-            y = cuda.cupy.empty_like(x)
+            y = cupy.empty_like(x)
             # Factor used in the moving average
             factor = 1 - self.decay
 
@@ -242,9 +242,9 @@ class BatchNormalizationFunction(function.Function):
                                               x_desc.value, self.mode)
             one = numpy.array(1, dtype=dtype).ctypes
             zero = numpy.array(0, dtype=dtype).ctypes
-            gx = cuda.cupy.empty_like(x)
-            ggamma = cuda.cupy.empty_like(gamma)
-            gbeta = cuda.cupy.empty_like(gamma)
+            gx = cupy.empty_like(x)
+            ggamma = cupy.empty_like(gamma)
+            gbeta = cupy.empty_like(gamma)
             libcudnn.batchNormalizationBackward(
                 handle, self.mode, one.data, zero.data,
                 one.data, zero.data, x_desc.value, x.data.ptr,
