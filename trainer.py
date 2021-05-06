@@ -1,6 +1,6 @@
 import numpy as np
 import six
-from scipy.misc import imresize, imrotate
+#from scipy.misc import imresize, imrotate
 
 from chainer import functions as F
 from chainer import cuda

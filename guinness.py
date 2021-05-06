@@ -70,7 +70,7 @@ class CUINNESS:
 
         self.projectEdit = 'Project1'
         self.optimizer = 'Adam'
-        self.useGPU = True
+        self.useGPU = False
         self.LoadConfig()
 
         self.td_label = "test_30_dataset.pkl"
@@ -80,7 +80,7 @@ class CUINNESS:
         self.tl_label = "test_30_label.pkl"
         self.open_FileDialog_tl()
 
-        self.n_trains_Edit = 10
+        self.n_trains_Edit = 2
 
         self.board = "zed"
 
