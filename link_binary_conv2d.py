@@ -73,7 +73,7 @@ class Convolution2D(link.Link):
         # the square root of wscale.
         # initializers.init_weight(self.W.data, self.initialW,
         #                          scale=math.sqrt(self.wscale))
-        self.W = chainer.Parameter(self.initialW, W_shape, scale=math.sqrt(self.wscale))
+        self.W = chainer.Parameter(self.initialW, W_shape)
 
         if nobias:
             self.b = None
@@ -92,7 +92,7 @@ class Convolution2D(link.Link):
         # the square root of wscale.
         # initializers.init_weight(self.W.data, self.initialW,
         #                          scale=math.sqrt(self.wscale))
-        self.W = chainer.Parameter(self.initialW, W_shape, scale=math.sqrt(self.wscale))
+        self.W = chainer.Parameter(self.initialW, W_shape)
 
     def __call__(self, x):
         """Applies the convolution layer.
