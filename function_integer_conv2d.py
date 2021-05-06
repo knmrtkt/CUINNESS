@@ -1,6 +1,7 @@
 import numpy
 from six import moves
 
+import cupy
 from cupy import cuda
 #from chainer import cupy.cuda
 from chainer import function
@@ -104,7 +105,8 @@ class IntegerConv2DFunction(function.Function):
         out_w = conv.get_conv_outsize(w, kw, self.sx, self.pw,
                                       cover_all=self.cover_all)
 
-        y = cuda.cupy.empty((n, out_c, out_h, out_w), dtype=x.dtype)
+        #y = cuda.cupy.empty((n, out_c, out_h, out_w), dtype=x.dtype)
+        y = cupy.empty((n, out_c, out_h, out_w), dtype=x.dtype)
         if (self.cover_all and cuda.cudnn_enabled and self.use_cudnn and
                 _check_cudnn_acceptable_type(x.dtype, W.dtype)):
             x = cuda.cupy.ascontiguousarray(x)
