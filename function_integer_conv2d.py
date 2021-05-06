@@ -18,8 +18,8 @@ def _as_mat(x):
         return x
     return x.reshape(len(x), -1)
 
-
-if cuda.cudnn_enabled:
+if True:
+#if cuda.cudnn_enabled:
     cudnn = cuda.cudnn
     #libcudnn = cuda.cudnn.cudnn
     libcudnn = cuda.cudnn
