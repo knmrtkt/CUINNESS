@@ -53,21 +53,7 @@ class CUINNESS:
         img_siz = 32
         n_class = 10
 
-        #self.setMyself()
-        self.set_project_name()
-        self.SaveProj()
-        #self.show()
-        self.start_training()
-        self.SaveProj()
-        self.start_bitgen()
-        self.SaveProj()
-
-    def setMyself(self):
-        self.setGeometry(50,50,1100,600)
-        self.setWindowTitle("GUINNESS: A GUI based Neural NEtwork SyntheSizer")
-
-    def set_project_name(self):
-
+        self.netName = 'VGG9ave'
         self.projectEdit = 'Project1'
         self.optimizer = 'Adam'
         self.useGPU = True
@@ -83,6 +69,12 @@ class CUINNESS:
         self.n_trains_Edit = 10
 
         self.board = "zed"
+        self.SaveProj()
+
+        self.start_training()
+        self.SaveProj()
+        self.start_bitgen()
+        self.SaveProj()
 
     # -----------------------------------------------------------------------
     # Performe Training
@@ -732,7 +724,7 @@ class CUINNESS:
     # -----------------------------------------------------------------------
     def LoadConfig(self):
         #template_name = self.combo1.currentText()
-        template_name = 'VGG9ave'
+        template_name = self.netName
 
         self.combo_box_options = ["Conv(Int)","Conv(Bin)","Max Pool","Ave Pool","Dense"]
         if template_name == 'LeNet5':
