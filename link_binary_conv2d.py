@@ -73,7 +73,7 @@ class Convolution2D(link.Link):
         # the square root of wscale.
         # initializers.init_weight(self.W.data, self.initialW,
         #                          scale=math.sqrt(self.wscale))
-        self.initialW = self.initialW * math.sqrt(self.wscale)
+        #self.initialW = self.initialW * math.sqrt(self.wscale)
         self.W = chainer.Parameter(self.initialW, W_shape)
         #self.W = self.W * math.sqrt(self.wscale)
 
@@ -89,14 +89,16 @@ class Convolution2D(link.Link):
     def _initialize_params(self, in_channels):
         kh, kw = _pair(self.ksize)
         W_shape = (self.out_channels, in_channels, kh, kw)
-        self.add_param('W', W_shape)
+        #self.add_param('W', W_shape)
+        with self.init_scope():
+            self.W = chainer.Parameter(None, W_shape)
         # For backward compatibility, the scale of weights is proportional to
         # the square root of wscale.
         # initializers.init_weight(self.W.data, self.initialW,
         #                          scale=math.sqrt(self.wscale))
-        self.initialW = self.initialW * math.sqrt(self.wscale)
-        self.W = chainer.Parameter(self.initialW, W_shape)
-        #self.W = self.W * math.sqrt(self.wscale)
+        #self.initialW = self.initialW * math.sqrt(self.wscale)
+            self.W = chainer.Parameter(self.initialW, W_shape)
+            self.W = self.W * math.sqrt(self.wscale)
 
     def __call__(self, x):
         """Applies the convolution layer.
