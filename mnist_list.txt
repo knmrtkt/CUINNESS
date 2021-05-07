@@ -1,0 +1,10 @@
+../mnist_png/mnist_png/training/0 zero
+../mnist_png/mnist_png/training/1 one
+../mnist_png/mnist_png/training/2 two
+../mnist_png/mnist_png/training/3 three
+../mnist_png/mnist_png/training/4 four
+../mnist_png/mnist_png/training/5 five
+../mnist_png/mnist_png/training/6 six
+../mnist_png/mnist_png/training/7 seven
+../mnist_png/mnist_png/training/8 eight
+../mnist_png/mnist_png/training/9 nine
