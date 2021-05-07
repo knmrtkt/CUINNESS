@@ -27,6 +27,7 @@ import pickle
 import subprocess
 #import seaborn as sns # this is optional...
 import shutil
+import argparse
 
 python = "python3"
 #batch_size = str(20)
@@ -40,7 +41,7 @@ is_load_pretrain = 0
 
 #class Layout(QtGui.QWidget):
 class CUINNESS:
-    def __init__(self):
+    def __init__(self, projectName, td_label, tl_label, epoch, netName='VGG9ave', optimizer='Adam', useGPU=True, board='zed'):
         super(CUINNESS,self).__init__()
 
         global is_load_pretrain
@@ -54,7 +55,7 @@ class CUINNESS:
         n_class = 10
 
         self.netName = 'VGG9ave'
-        self.projectEdit = 'Project1'
+        self.projectName = 'Project1'
         self.optimizer = 'Adam'
         self.useGPU = True
         self.LoadConfig()
@@ -191,17 +192,17 @@ class CUINNESS:
         net3_file = net3_file.replace("./","../")
 
         # generate project directory if it not exist
-        project_dir = "./" + self.projectEdit
+        project_dir = "./" + self.projectName
         if os.path.exists(project_dir) == False:
             os.mkdir(project_dir)
 
         # save Python simulation codes
-        fname = "./" + self.projectEdit + '/net3.py'
+        fname = "./" + self.projectName + '/net3.py'
         print("[INFO] Python evaluation codes are seved to %s" % fname)
         with open(fname,'w') as f:
             f.write(net3_file)
 
-        fname = "./" + self.projectEdit + '/eval.py'
+        fname = "./" + self.projectName + '/eval.py'
         print("[INFO] COPY evaluation code")
         shutil.copyfile('eval.py',fname)
 
@@ -216,7 +217,7 @@ class CUINNESS:
             optimizer_alg = "adam"
         project_name = "temp"
 
-        project_dir = "./" + self.projectEdit
+        project_dir = "./" + self.projectName
         if os.path.exists(project_dir) == False:
             os.mkdir(project_dir)
 
@@ -235,7 +236,7 @@ class CUINNESS:
             # copy pre-trained model,log files
             if os.path.isfile('./temp.model') == True:
                 os.remove('./temp.model')
-            model_file = "./" + self.projectEdit + '/temp.model'
+            model_file = "./" + self.projectName + '/temp.model'
             if os.path.isfile(model_file) == True:
                 print("[INFO] RESUME PRE-TRAINED MODEL FILE %s" % model_file)
                 shutil.copyfile(model_file,'./temp.model')
@@ -245,7 +246,7 @@ class CUINNESS:
 
             if os.path.isfile('./temp_log.csv') == True:
                 os.remove('./temp_log.csv')
-            log_file = "./" + self.projectEdit + '/temp_log.csv'
+            log_file = "./" + self.projectName + '/temp_log.csv'
             if os.path.isfile(log_file) == True:
                 print("[INFO] RESUME PRE-TRAINED LOG FILE %s" % log_file)
                 shutil.copyfile(log_file,'./temp_log.csv')
@@ -275,8 +276,8 @@ class CUINNESS:
         # self.timer.timeout.connect(self.updateCanvas)
         # self.timer.start(1000)
         print("[INFO] FINISH TRAINING")
-        subprocess.run(["cp","temp.model","./" + self.projectEdit]) # background job = python train.py &
-        subprocess.run(["cp","temp_log.csv","./" + self.projectEdit]) # background job = python train.py &
+        subprocess.run(["cp","temp.model","./" + self.projectName]) # background job = python train.py &
+        subprocess.run(["cp","temp_log.csv","./" + self.projectName]) # background job = python train.py &
         is_load_pretrain = 1
         #self.updateCanvas()
     
@@ -303,13 +304,13 @@ class CUINNESS:
         with open("train_status.txt", "r") as f:
             status = f.read()
             print("[INFO] FINISH TRAINING")
-            project_path = "./" + self.projectEdit
+            project_path = "./" + self.projectName
             subprocess.run(["cp","temp.model",project_path]) # background job = python train.py &
             subprocess.run(["cp","temp_log.csv",project_path]) # background job = python train.py &
             is_load_pretrain = 1
             # if status != 'run':
             #     print("[INFO] FINISH TRAINING")
-            #     project_path = "./" + self.projectEdit
+            #     project_path = "./" + self.projectName
             #     subprocess.run(["cp","temp.model",project_path]) # background job = python train.py &
             #     subprocess.run(["cp","temp_log.csv",project_path]) # background job = python train.py &
             #     #self.timer.stop()
@@ -385,7 +386,7 @@ class CUINNESS:
         config['max_bconv_width'] = max_bconv_width
         config['num_layer'] = len(initial_options)
 
-        config_file = "./" + self.projectEdit + "/config.pickle"
+        config_file = "./" + self.projectName + "/config.pickle"
         with open(config_file, mode='wb') as f:
             pickle.dump(config, f)
        
@@ -403,19 +404,19 @@ class CUINNESS:
         self.save_configfile()
 
         # generate SDSoC directory
-        sdsoc_dir = "./" + self.projectEdit + "/sdsoc"
+        sdsoc_dir = "./" + self.projectName + "/sdsoc"
         if os.path.exists(sdsoc_dir) == False:
             os.mkdir(sdsoc_dir)
 
         # generate HLS directory
-        print("[INFO] MAKE A DIRECTROY: ./%s/HLS" % self.projectEdit)
-        HLS_dir = "./" + self.projectEdit + "/HLS"
+        print("[INFO] MAKE A DIRECTROY: ./%s/HLS" % self.projectName)
+        HLS_dir = "./" + self.projectName + "/HLS"
         if os.path.exists(HLS_dir) == False:
             os.mkdir(HLS_dir)
 
         # Call C++ code generator for the SDSoC
         print("[INFO] GENERATE C++ CODE")
-        config_path = "./" + self.projectEdit
+        config_path = "./" + self.projectName
 
         #subprocess.Popen([python,"gen_cpp_code_v3.py","--config_path",config_path]) # background job = python train.py &
         subprocess.run([python,"gen_cpp_code_v3.py","--config_path",config_path]) # background job = python train.py &
@@ -430,31 +431,31 @@ class CUINNESS:
 
         for line in lines2:
             tmp = line.replace("(CNN_C_SOURCE)","cnn.cpp")
-            tmp = tmp.replace("(ELF_FILE_PATH)",self.projectEdit + ".elf")
+            tmp = tmp.replace("(ELF_FILE_PATH)",self.projectName + ".elf")
             #tmp = tmp.replace("(TARGET_BOARD)",self.combo2.currentText())
             tmp = tmp.replace("(TARGET_BOARD)",self.board)
 
             makefile_txt += tmp
 
-        makefile_name = "./" + self.projectEdit + "/sdsoc/Makefile"
+        makefile_name = "./" + self.projectName + "/sdsoc/Makefile"
         with open(makefile_name,'w') as f:
             f.write(makefile_txt)
 
         # generate sdsoc/sd_card directory
-        print("[INFO] MAKE A DIRECTROY: ./%s/sdsoc/to_sd_card" % self.projectEdit)
-        sd_card_dir = "./" + self.projectEdit + "/sdsoc/to_sd_card"
+        print("[INFO] MAKE A DIRECTROY: ./%s/sdsoc/to_sd_card" % self.projectName)
+        sd_card_dir = "./" + self.projectName + "/sdsoc/to_sd_card"
         if os.path.exists(sd_card_dir) == False:
             os.mkdir(sd_card_dir)
 
         # generate HLS directory
-        print("[INFO] MAKE A DIRECTROY: ./%s/HLS_old" % self.projectEdit)
-        HLS_dir = "./" + self.projectEdit + "/HLS_old"
+        print("[INFO] MAKE A DIRECTROY: ./%s/HLS_old" % self.projectName)
+        HLS_dir = "./" + self.projectName + "/HLS_old"
         if os.path.exists(HLS_dir) == False:
             os.mkdir(HLS_dir)
 
         # convert trained *.model to weight text file
         print("[INFO] CONVERT TRAINED WEIGHTS INTO TEXT FILE")
-        config_path = "./" + self.projectEdit
+        config_path = "./" + self.projectName
         #proc = subprocess.Popen([python,"conv_npz2txt_v2.py","--config_path",config_path]) # background job = python train.py &
         proc = subprocess.run([python,"conv_npz2txt_v2.py","--config_path",config_path]) # background job = python train.py &
         #proc.wait()
@@ -465,7 +466,7 @@ class CUINNESS:
         print("[INFO] COPY BENCHMARK IMAGE FILE")
         image_file = "./test_img.txt"
         if os.path.isfile(image_file) == True:
-            sd_card_dir = "./" + self.projectEdit + "/sdsoc/to_sd_card"
+            sd_card_dir = "./" + self.projectName + "/sdsoc/to_sd_card"
             #subprocess.Popen(["cp",image_file,sd_card_dir])
             subprocess.run(["cp",image_file,sd_card_dir])
             print(" ... [FINISH]")
@@ -487,7 +488,7 @@ class CUINNESS:
     # save configuration file
     def SaveProj(self):
         config = ''
-        config += 'PROJECT_NAME: %s\n' % self.projectEdit
+        config += 'PROJECT_NAME: %s\n' % self.projectName
         config += 'TRAINING_DATA: %s\n' % self.td_label
         config += 'TRAINING_LABEL: %s\n' % self.tl_label
         config += 'NUM_OF_EPOCS: %d\n' % int(self.n_trains_Edit)
@@ -501,8 +502,8 @@ class CUINNESS:
             config += 'USE_GPU: NO\n'
         config += 'FPGA_BOARD: %s\n' % self.board
 
-        config_file = "./" + self.projectEdit + "/" + self.projectEdit + ".proj"
-        config_dir = "./" + self.projectEdit
+        config_file = "./" + self.projectName + "/" + self.projectName + ".proj"
+        config_dir = "./" + self.projectName
         if os.path.exists(config_dir) == False:
             os.mkdir(config_dir)
 
@@ -523,7 +524,7 @@ class CUINNESS:
     #             key, val = line.split()
                 
     #             if key == 'PROJECT_NAME:':
-    #                 self.projectEdit.setText(val)
+    #                 self.projectName.setText(val)
     #             elif key == 'TRAINING_DATA:':
     #                 self.td_label.setText(val)
     #             elif key == 'TRAINING_LABEL:':
@@ -556,7 +557,7 @@ class CUINNESS:
     #                 pass        
 
     #     # Restore CNN Configuration Table
-    #     config_file = "./" + self.projectEdit + "/config.pickle"
+    #     config_file = "./" + self.projectName + "/config.pickle"
     #     with open(config_file, mode='rb') as f:
     #         config = pickle.load(f)
 
@@ -586,7 +587,7 @@ class CUINNESS:
 
     #     # Restore Training Status Graph
     #     log_file = "temp_log.csv"
-    #     log_path = "./" + self.projectEdit + "/" + log_file
+    #     log_path = "./" + self.projectName + "/" + log_file
 
     #     if( os.path.exists(log_path) == True):
     #         print("log_file %s" % log_path)
@@ -860,7 +861,14 @@ def main():
     #app = QtGui.QApplication(sys.argv)
     #ex = Layout()
     #sys.exit(app.exec_())
-    CUINNESS()
+    #(projectName, td_label, tl_label, epoch, netName='VGG9ave', optimizer='Adam', useGPU=True, board='zed'):
+    parser = argparse.ArgumentParser(description='CUINNESS')
+    parser.add_argument('projectName', help='Project Name')
+    parser.add_argument('dataset', help='Dataset Name')
+    parser.add_argument('epoch', help='epoch')
+
+    args = parser.parse_args()
+    CUINNESS(args.projectName, args.dataset+'_dataset.pkl', args.dataset+'_label.pkl', args.epoch)
 if __name__ == "__main__":
     main()
 
