@@ -31,7 +31,7 @@ import argparse
 
 python = "python3"
 #batch_size = str(20)
-batch_size = str(10)
+batch_size = str(100)
 
 #global variables
 n_dim = 3 # the number of dimensions for the first layer (BGR format)
