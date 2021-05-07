@@ -54,24 +54,20 @@ class CUINNESS:
         img_siz = 32
         n_class = 10
 
-        self.netName = 'VGG9ave'
-        self.projectName = 'Project1'
-        self.optimizer = 'Adam'
-        self.useGPU = True
+        self.projectName = projectName
+        self.td_label = td_label
+        self.tl_label = tl_label
+        self.n_trains_Edit = epoch
+
+        self.netName = netName
+        self.optimizer = optimizer
+        self.useGPU = useGPU
+        self.board = board
+
         self.LoadConfig()
-
-        self.td_label = "test_30_dataset.pkl"
-        self.open_FileDialog()
-
-
-        self.tl_label = "test_30_label.pkl"
+        self.open_FileDialog()        
         self.open_FileDialog_tl()
-
-        self.n_trains_Edit = 10
-
-        self.board = "zed"
         self.SaveProj()
-
         self.start_training()
         self.SaveProj()
         self.start_bitgen()
