@@ -74,13 +74,10 @@ class Convolution2D(link.Link):
         # initializers.init_weight(self.W.data, self.initialW,
         #                          scale=math.sqrt(self.wscale))
         #self.initialW = self.initialW * math.sqrt(self.wscale)
-        file = open('initW.txt', 'w')
-        file.write('self.W.data\n')
-        file.write(str(self.W.data))
-        file.write('self.iniialW\n')
-        file.write(str(self.initialW))
-        file.close()
-        self.W = chainer.Parameter(self.initialW, W_shape)
+
+        #self.W = chainer.Parameter(self.initialW, W_shape)
+        self.W = chainer.Parameter(chainer.initializers.HeNormal(1/numpy.sqrt(2)), W_shape)
+        self.W *= math.sqrt(self.wscale)
         #self.W = self.W * math.sqrt(self.wscale)
 
         if nobias:
@@ -103,7 +100,9 @@ class Convolution2D(link.Link):
         # initializers.init_weight(self.W.data, self.initialW,
         #                          scale=math.sqrt(self.wscale))
         #self.initialW = self.initialW * math.sqrt(self.wscale)
-        self.W = chainer.Parameter(self.initialW, W_shape)
+
+        self.W = chainer.Parameter(chainer.initializers.HeNormal(1/numpy.sqrt(2)), W_shape)
+        self.W *= math.sqrt(self.wscale)
         #self.W = self.W * math.sqrt(self.wscale)
 
     def __call__(self, x):
