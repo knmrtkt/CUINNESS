@@ -77,9 +77,9 @@ class Convolution2D(link.Link):
 
         #self.initialW = self.initialW * math.sqrt(self.wscale)
         #self.W = chainer.Parameter(self.initialW, W_shape)
-        self.W = chainer.Parameter(chainer.initializers.HeNormal(1/numpy.sqrt(2)), W_shape)
-        self.W *= math.sqrt(self.wscale)
-        self.W.is_initialized = True
+        with self.init_scope():
+            self.W = chainer.Parameter(chainer.initializers.HeNormal(1/numpy.sqrt(2)), W_shape)
+            self.W *= math.sqrt(self.wscale)
         #self.W = self.W * math.sqrt(self.wscale)
 
         if nobias:
@@ -103,8 +103,8 @@ class Convolution2D(link.Link):
         #                          scale=math.sqrt(self.wscale))
         #self.initialW = self.initialW * math.sqrt(self.wscale)
         #self.W = chainer.Parameter(self.initialW, W_shape)
-        self.W = chainer.Parameter(chainer.initializers.HeNormal(1/numpy.sqrt(2)), W_shape)
-        self.W *= math.sqrt(self.wscale)
+        #self.W = chainer.Parameter(chainer.initializers.HeNormal(1/numpy.sqrt(2)), W_shape)
+        #self.W *= math.sqrt(self.wscale)
         #    self.W = self.W * math.sqrt(self.wscale)
 
     def __call__(self, x):
