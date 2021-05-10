@@ -79,8 +79,9 @@ class Convolution2D(link.Link):
         #self.W = chainer.Parameter(self.initialW, W_shape)
         with self.init_scope():
             self.add_param('W', W_shape)
-            self.W = chainer.Parameter(chainer.initializers.HeNormal(1/numpy.sqrt(2)), W_shape)
-            self.W *= math.sqrt(self.wscale)
+            # self.W = chainer.Parameter(chainer.initializers.HeNormal(1/numpy.sqrt(2)), W_shape)
+            # self.W *= math.sqrt(self.wscale)
+            self.W = chainer.Parameter(self.initialW, W_shape)
         #self.W = self.W * math.sqrt(self.wscale)
 
         if nobias:
