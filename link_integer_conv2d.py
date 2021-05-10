@@ -9,7 +9,7 @@ from chainer import link
 import numpy
 
 
-class Convolution2D(link.Link):
+class Convolution2D(chainer.Link):
 
     """Two-dimensional convolutional layer.
 
