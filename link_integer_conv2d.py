@@ -9,7 +9,7 @@ from chainer import link
 import numpy
 
 
-class Convolution2D(chainer.Link):
+class Convolution2D(link.Link):
 
     """Two-dimensional convolutional layer.
 
@@ -62,10 +62,10 @@ class Convolution2D(chainer.Link):
         self.initialW = initialW
         self.wscale = wscale
 
-        if in_channels is None:
-            self.add_uninitialized_param('W')
-        else:
-            self._initialize_params(in_channels)
+        # if in_channels is None:
+        #     self.add_uninitialized_param('W')
+        # else:
+        #     self._initialize_params(in_channels)
 
         kh, kw = _pair(self.ksize)
         W_shape = (self.out_channels, in_channels, kh, kw)
@@ -78,6 +78,7 @@ class Convolution2D(chainer.Link):
         #self.initialW = self.initialW * math.sqrt(self.wscale)
         #self.W = chainer.Parameter(self.initialW, W_shape)
         with self.init_scope():
+            self.add_param('W', W_shape)
             self.W = chainer.Parameter(chainer.initializers.HeNormal(1/numpy.sqrt(2)), W_shape)
             self.W *= math.sqrt(self.wscale)
         #self.W = self.W * math.sqrt(self.wscale)
