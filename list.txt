@@ -1,3 +1,0 @@
-image/0 straight
-image/1 right
-image/2 left
