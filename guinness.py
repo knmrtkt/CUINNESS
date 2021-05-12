@@ -862,7 +862,7 @@ def main():
     parser.add_argument('projectName', help='Project Name')
     parser.add_argument('dataset', help='Dataset Name')
     parser.add_argument('epoch', help='epoch')
-    parser.add_argument('--netName', help='netName') 
+    parser.add_argument('--netName', default='VGG9ave', help='netName') 
 
     args = parser.parse_args()
     CUINNESS(args.projectName, args.dataset+'_dataset.pkl', args.dataset+'_label.pkl', args.epoch, netName=args.netName)
