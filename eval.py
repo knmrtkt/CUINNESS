@@ -121,9 +121,9 @@ if __name__ == '__main__':
         print("test=%d(%s)" % (result.data.argmax(),name[result.data.argmax()]))
 
         # show test image
-        cv2.imshow("test image", image1)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        #cv2.imshow("test image", image1)
+        #cv2.waitKey(0)
+        #cv2.destroyAllWindows()
 
         # regist a confusion matrix
         conf_matrix[test_y[idx],result.data.argmax()] = conf_matrix[test_y[idx],result.data.argmax()] + 1
