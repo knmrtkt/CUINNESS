@@ -72,12 +72,14 @@ class BatchNormalization(link.Link):
             self.add_param('gamma', size, dtype=dtype)
             if initial_gamma is None:
                 initial_gamma = initializers.One()
-            initializers.init_weight(self.gamma.data, initial_gamma)
+            #initializers.init_weight(self.gamma.data, initial_gamma)
+            self.gamma = chainer.Parameter(initial_gamma, (1,))
         if use_beta:
             self.add_param('beta', size, dtype=dtype)
             if initial_beta is None:
                 initial_beta = initializers.Zero()
-            initializers.init_weight(self.beta.data, initial_beta)
+            #initializers.init_weight(self.beta.data, initial_beta)
+            self.beta = chainer.Parameter(initial_beta, (1,))
         self.add_persistent('avg_mean', numpy.zeros(size, dtype=dtype))
         self.add_persistent('avg_var', numpy.zeros(size, dtype=dtype))
         self.add_persistent('N', 0)
