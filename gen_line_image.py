@@ -54,7 +54,7 @@ class gen_line_image():
             domain_begin = domain_b
             domain_end = domain_a 
         # print('begin=' + str(begin) + ', ' + 'end=' + str(end))
-        print('domain_begin=' + str(domain_begin) + ', ' + 'domain_end=' + str(domain_end))
+        # print('domain_begin=' + str(domain_begin) + ', ' + 'domain_end=' + str(domain_end))
         return begin, end, domain_begin, domain_end
 
     def get_label_from_domain(self, domain_begin, domain_end):
@@ -72,7 +72,7 @@ class gen_line_image():
             else:
               drawable = False
               label = "none"
-              print('invalid line')
+              # print('invalid line')
         elif(domain_begin==1):
             # if(3<=domain_end<=9):
             if(domain_end==6):
@@ -81,7 +81,7 @@ class gen_line_image():
             else:
               drawable = False
               label = "none"
-              print('invalid line')
+              # print('invalid line')
         elif(domain_begin==2):
             # if(4<=domain_end<=8):
             if(domain_end==8):
@@ -95,7 +95,7 @@ class gen_line_image():
             else:
               drawable = False
               label = "none"
-              print('invalid line')
+              # print('invalid line')
         elif(domain_begin==3):
             if(5<=domain_end<=8):
               # drawable = True
@@ -104,7 +104,7 @@ class gen_line_image():
             else:
               drawable = False
               label = "none"
-              print('invalid line')
+              # print('invalid line')
         elif(domain_begin==9):
             if(4<=domain_end<=7):
               # drawable = True
@@ -113,11 +113,11 @@ class gen_line_image():
             else:
               drawable = False
               label = "none"
-              print('invalid line')
+              # print('invalid line')
         else:
             drawable = False
             label = "none"
-            print('invalid line')
+            # print('invalid line')
         # print(drawable, label)
         return drawable, label
 
@@ -157,14 +157,14 @@ class gen_line_image():
               cv2.line(image, begin, end ,color, line_width)
               cv2.imwrite(dst_dir + class_label[label] + "/" + str(straight_generated) + ".png", image)
               writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(straight_generated) + ".png",class_label[label]])
-              print(straight_generated)
+              # print(straight_generated)
               straight_generated = straight_generated + 1
             
             elif((label=="notstraight") and (notstraight_generated < notstraight_num)):
               cv2.line(image, begin, end ,color, line_width)
               cv2.imwrite(dst_dir + class_label[label] + "/" + str(notstraight_generated) + ".png", image)
               writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(notstraight_generated) + ".png",class_label[label]])
-              print(notstraight_generated)
+              # print(notstraight_generated)
               notstraight_generated = notstraight_generated + 1
             # elif((label=="left") and (left_generated < left_num)):
             #   cv2.line(image, begin, end ,color, line_width)
@@ -178,4 +178,4 @@ class gen_line_image():
             #   writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(right_generated) + ".png",class_label[label]])
             #   print(right_generated)
             #   right_generated = right_generated + 1 
-            print("-------------------------")
+            # print("-------------------------")
