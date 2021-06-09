@@ -192,8 +192,9 @@ class image_generator():
         else:
             print("error: should specify the direction in write_straight()")
             return
-        cv2.line(image, begin, end, color, line_width)
-        cv2.line(image, (0,height//2), (width, height//2), color, line_width)
+        image = cv2.line(image, begin, end, color, line_width)
+        image = cv2.line(image, (0,height//2), (width, height//2), color, line_width)
+        return image
         
     def write_curve(self, image, width, height, color, line_width, direction="right"):
         while(1):
@@ -211,7 +212,9 @@ class image_generator():
             return
         
         angle = np.random.randint(-5,6)
-        cv2.ellipse(image,center,axes,angle,0,360,color,line_width)
+        image = cv2.ellipse(image,center,axes,angle,0,360,color,line_width)
+        return image
+
     def generate_dataset(self, dst_dir, width=30, height=30, line_width=4, img_num=50, class_label={"straight" : "0", "right_straight" : "1", "left_straight" : "2", "right_curve" : "3","left_curve" : "4",}):
         for dir_no in class_label.values():
             os.makedirs(dst_dir + dir_no, exist_ok=True)
@@ -225,15 +228,15 @@ class image_generator():
                     image.fill(255)
                     color=0
                     if(label=="straight"):
-                        self.write_straight(image, width, height, color, line_width, "straight")
+                        image = self.write_straight(image, width, height, color, line_width, "straight")
                     elif(label=="right_straight"):
-                        self.write_straight(image, width, height, color, line_width, "right")
+                        image = self.write_straight(image, width, height, color, line_width, "right")
                     elif(label=="left_straight"):
-                        self.write_straight(image, width, height, color, line_width, "left")
+                        image = self.write_straight(image, width, height, color, line_width, "left")
                     elif(label=="right_curve"):
-                        self.write_curve(image, width, height, color, line_width, "right")
+                        image = self.write_curve(image, width, height, color, line_width, "right")
                     elif(label=="left_curve"):
-                        self.write_curve(image, width, height, color, line_width, "left")
+                        image = self.write_curve(image, width, height, color, line_width, "left")
                     else:
                         print("Unknown Class")
                     cv2.imwrite(dst_dir + class_label[label] + "/" + str(j) + ".png", image)
