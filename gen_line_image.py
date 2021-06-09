@@ -194,6 +194,7 @@ class image_generator():
             return
         image = cv2.line(image, begin, end, color, line_width)
         image = cv2.line(image, (0,height-line_width), (width, height-line_width), color, line_width//2)
+        image = cv2.line(image, (line_width,0), (line_width, height), color, line_width//2)
         return image
         
     def write_curve(self, image, width, height, color, line_width, direction="right"):
