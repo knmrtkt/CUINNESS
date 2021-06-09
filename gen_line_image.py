@@ -193,9 +193,9 @@ class image_generator():
             print("error: should specify the direction in write_straight()")
             return
         image = cv2.line(image, begin, end, color, line_width)
-        image = cv2.line(image, begin, (end[0]+line_width//2, end[1]), color, line_width)
-        image = cv2.line(image, begin, (end[0]-line_width//2, end[1]), color, line_width)
-        image = cv2.line(image, (0,height-line_width), (width, height-line_width), color, line_width//2)
+        image = cv2.line(image, begin, (end[0]+line_width, end[1]), color, line_width)
+        image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
+        #image = cv2.line(image, (0,height-line_width), (width, height-line_width), color, line_width//2)
         image = cv2.line(image, (line_width,0), (line_width, height), color, line_width//2)
         return image
         
