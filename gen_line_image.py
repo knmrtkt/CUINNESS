@@ -58,8 +58,10 @@ class gen_line_image():
         return begin, end, domain_begin, domain_end
 
     def get_label_from_domain(self, domain_begin, domain_end):
-        if(domain_begin==0):
-            if(4<=domain_end<=8):
+        #if(domain_begin==0):
+        if(0):
+            #if(4<=domain_end<=8):
+            if(9<=domain_end<=8):
               drawable = True
               label = "left"
             elif(domain_end==3 or domain_end==9):
@@ -70,14 +72,16 @@ class gen_line_image():
               label = "none"
               print('invalid line')
         elif(domain_begin==1):
-            if(3<=domain_end<=9):
+            #if(3<=domain_end<=9):
+            if(6<=domain_end<=6):
               drawable = True
               label = "straight"
             else:
               drawable = False
               label = "none"
               print('invalid line')
-        elif(domain_begin==2):
+        #elif(domain_begin==2):
+        elif(0):
             if(4<=domain_end<=8):
               drawable = True
               label = "right"
@@ -88,8 +92,10 @@ class gen_line_image():
               drawable = False
               label = "none"
               print('invalid line')
-        elif(domain_begin==3):
-            if(5<=domain_end<=8):
+        #elif(domain_begin==3):
+        elif(0):
+            #if(5<=domain_end<=8):
+            if(8<=domain_end<=8):
               drawable = True
               label = "right"
             else:
@@ -97,7 +103,8 @@ class gen_line_image():
               label = "none"
               print('invalid line')
         elif(domain_begin==9):
-            if(4<=domain_end<=7):
+            #if(4<=domain_end<=7):
+            if(4<=domain_end<=4):
               drawable = True
               label = "left"
             else:
@@ -112,9 +119,9 @@ class gen_line_image():
         return drawable, label
 
     def generate_image(self, W, H, domain_num_W, domain_num_H, dst_dir, csv_name, img_num, line_width, class_label):
-        straight_num = img_num//3
-        left_num = img_num//3
-        right_num = img_num//3
+        straight_num = img_num//2
+        left_num = img_num//2
+        right_num = 0#img_num//3
         for dir_no in class_label.values():
           os.makedirs(dst_dir + dir_no, exist_ok=True)
         with open(dst_dir + csv_name, 'w') as f:
