@@ -63,7 +63,7 @@ class gen_line_image():
             if(domain_end==4):
               drawable = True
               # label = "left"
-              label = "notstraight"
+              label = "not1"
             elif(domain_end==3 or domain_end==9):
               # drawable = True
               drawable = False
@@ -86,7 +86,7 @@ class gen_line_image():
             # if(4<=domain_end<=8):
             if(domain_end==8):
               drawable = True
-              label = "notstraight"
+              label = "not2"
             elif(domain_end==3 or domain_end==9):
               # drawable = True
               drawable = False
@@ -125,8 +125,9 @@ class gen_line_image():
         # straight_num = img_num//3
         # left_num = img_num//3
         # right_num = img_num//3
-        straight_num = img_num//2
-        notstraight_num = img_num//2
+        straight_num = img_num//3
+        not1_num = img_num//3
+        not2_num = img_num//3
 
         for dir_no in class_label.values():
           os.makedirs(dst_dir + dir_no, exist_ok=True)
@@ -137,10 +138,11 @@ class gen_line_image():
           # left_generated = 0
           # right_generated = 0
           straight_generated = 0
-          notstraight_generated = 0
+          not1_generated = 0
+          not2_generated = 0
 
           # while(straight_generated + left_generated + right_generated < img_num):
-          while(straight_generated + notstraight_generated  < img_num):
+          while(straight_generated + not1_generated + not2_generated  < img_num):
             image = np.zeros((H,W,1), dtype=np.uint8)
             image.fill(255)
             color=0
@@ -160,12 +162,19 @@ class gen_line_image():
               # print(straight_generated)
               straight_generated = straight_generated + 1
             
-            elif((label=="notstraight") and (notstraight_generated < notstraight_num)):
+            elif((label=="not1") and (not1_generated < not1_num)):
+              cv2.line(image, begin, end ,color, line_width)
+              cv2.imwrite(dst_dir + class_label[label] + "/" + str(not1generated) + ".png", image)
+              writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(not1_generated) + ".png",class_label[label]])
+              # print(notstraight_generated)
+              not1_generated = not1_generated + 1
+
+            elif((label=="not2") and (not2_generated < not2_num)):
               cv2.line(image, begin, end ,color, line_width)
               cv2.imwrite(dst_dir + class_label[label] + "/" + str(notstraight_generated) + ".png", image)
-              writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(notstraight_generated) + ".png",class_label[label]])
+              writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(not2_generated) + ".png",class_label[label]])
               # print(notstraight_generated)
-              notstraight_generated = notstraight_generated + 1
+              not2_generated = not2_generated + 1
             # elif((label=="left") and (left_generated < left_num)):
             #   cv2.line(image, begin, end ,color, line_width)
             #   cv2.imwrite(dst_dir + class_label[label] + "/" + str(left_generated) + ".png", image)
