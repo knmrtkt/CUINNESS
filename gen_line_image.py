@@ -63,7 +63,7 @@ class gen_line_image():
             if(domain_end==4):
               drawable = True
               # label = "left"
-              label = "straight"
+              label = "notstraight"
             elif(domain_end==3 or domain_end==9):
               # drawable = True
               drawable = False
