@@ -193,6 +193,7 @@ class image_generator():
             print("error: should specify the direction in write_straight()")
             return
         cv2.line(image, begin, end, color, line_width)
+        cv2.line(image, (0, height-2*line_width), (width, height-2*line_width), color, line_width)
         
     def write_curve(self, image, width, height, color, line_width, direction="right"):
         while(1):
