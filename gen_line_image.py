@@ -162,3 +162,79 @@ class gen_line_image():
               print(right_generated)
               right_generated = right_generated + 1 
             print("-------------------------")
+
+class image_generator():
+    def __init__(self):
+        pass
+    def write_straight(self, image, width, height, color, line_width, direction="straight", grad_range=(40, 45, 3)):
+        if(direction=="straight"):
+            grad  = np.random.randint(-grad_range[2],grad_range[2]+1)
+            begin = (np.random.randint(line_width,width-line_width), 0)
+            end   = (int(math.tan(math.radians(grad))*height) + begin[0], height) 
+        elif(direction=="right"):
+            grad = np.random.randint(-grad_range[1],-grad_range[0]+1)
+            rand = np.random.randint(line_width*3,width+height-line_width*3)
+            if(rand < width):
+                begin = (rand, 0)
+                end   = (int(math.tan(math.radians(grad))*height) + begin[0], height)
+            else:
+                begin = (width, rand-width)
+                end   = (width + int(math.tan(math.radians(grad))*(height-begin[1])), height)
+        elif(direction=="left"):
+            grad = np.random.randint(grad_range[0],grad_range[1]+1)
+            rand = np.random.randint(line_width*3,width+height-line_width*3)
+            if(rand < width):
+                begin = (width-rand, 0)
+                end   = (int(math.tan(math.radians(grad))*(height)+begin[0]), height)
+            else:
+                begin = (0, rand-width)
+                end   = (int(math.tan(math.radians(grad))*(height-begin[1])), height)
+        else:
+            print("error: should specify the direction in write_straight()")
+            return
+        cv2.line(image, begin, end, color, line_width)
+        
+    def write_curve(self, image, width, height, color, line_width, direction="right"):
+        while(1):
+            rand = np.random.randint(line_width*2,height-line_width/2)
+            axes = (rand, np.random.randint(rand-line_width*2, rand+line_width*2))
+            norm = int(math.sqrt((axes[0])**2 + (axes[1])**2))
+            if(norm > width/2):
+                break
+        if(direction == "right"):
+            center = (width,height)
+        elif(direction == "left"):
+            center = (0,height)
+        else:
+            print("error: should specify the direction in write_curve()")
+            return
+        
+        angle = np.random.randint(-5,6)
+        cv2.ellipse(image,center,axes,angle,0,360,color,line_width)
+    def generate_dataset(self, dst_dir, width=30, height=30, line_width=4, img_num=50, class_label={"straight" : "0", "right_straight" : "1", "left_straight" : "2", "right_curve" : "3","left_curve" : "4",}):
+        for dir_no in class_label.values():
+            os.makedirs(dst_dir + dir_no, exist_ok=True)
+        with open(dst_dir + 'dataset.csv', 'w') as f:
+            writer = csv.writer(f)
+            writer.writerow(['path','label'])
+            for label in class_label:
+                j=0
+                while(j<img_num):
+                    image = np.zeros((height,width,1), dtype=np.uint8)
+                    image.fill(255)
+                    color=0
+                    if(label=="straight"):
+                        self.write_straight(image, width, height, color, line_width, "straight")
+                    elif(label=="right_straight"):
+                        self.write_straight(image, width, height, color, line_width, "right")
+                    elif(label=="left_straight"):
+                        self.write_straight(image, width, height, color, line_width, "left")
+                    elif(label=="right_curve"):
+                        self.write_curve(image, width, height, color, line_width, "right")
+                    elif(label=="left_curve"):
+                        self.write_curve(image, width, height, color, line_width, "left")
+                    else:
+                        print("Unknown Class")
+                    cv2.imwrite(dst_dir + class_label[label] + "/" + str(j) + ".png", image)
+                    writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(j) + ".png",class_label[label]])
+                    j = j+1
