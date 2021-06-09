@@ -67,7 +67,8 @@ class gen_line_image():
             elif(domain_end==3 or domain_end==9):
               # drawable = True
               drawable = False
-              label = "straight"
+              # label = "straight"
+              label = "none"
             else:
               drawable = False
               label = "none"
@@ -89,7 +90,8 @@ class gen_line_image():
             elif(domain_end==3 or domain_end==9):
               # drawable = True
               drawable = False
-              label = "straight"
+              # label = "straight"
+              label = "none"
             else:
               drawable = False
               label = "none"
