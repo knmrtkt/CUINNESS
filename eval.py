@@ -34,6 +34,7 @@ import time
 import weight_clip
 
 import cv2
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Evaluation Python Code')
@@ -124,6 +125,7 @@ if __name__ == '__main__':
         #cv2.imshow("test image", image1)
         #cv2.waitKey(0)
         #cv2.destroyAllWindows()
+        plt.imshow(image1)
 
         # regist a confusion matrix
         conf_matrix[test_y[idx],result.data.argmax()] = conf_matrix[test_y[idx],result.data.argmax()] + 1
