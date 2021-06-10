@@ -46,6 +46,9 @@ if __name__ == '__main__':
                         help='Dataset image pkl file path')
     parser.add_argument('--size', type=int, default=32,
                         help='Test Image Size')
+    parser.add_argument('--testnum', type=int, default=10,
+                        help='Test Image Num')
+                        
     args = parser.parse_args()
 
     print('loading dataset...')
