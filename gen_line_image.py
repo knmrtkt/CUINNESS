@@ -164,7 +164,7 @@ class gen_line_image():
             
             elif((label=="not1") and (not1_generated < not1_num)):
               cv2.line(image, begin, end ,color, line_width)
-              cv2.imwrite(dst_dir + class_label[label] + "/" + str(not1generated) + ".png", image)
+              cv2.imwrite(dst_dir + class_label[label] + "/" + str(not1_generated) + ".png", image)
               writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(not1_generated) + ".png",class_label[label]])
               # print(notstraight_generated)
               not1_generated = not1_generated + 1
