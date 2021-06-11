@@ -53,8 +53,8 @@ class gen_line_image():
             end = a
             domain_begin = domain_b
             domain_end = domain_a 
-        print('begin=' + str(begin) + ', ' + 'end=' + str(end))
-        print('domain_begin=' + str(domain_begin) + ', ' + 'domain_end=' + str(domain_end))
+        #print('begin=' + str(begin) + ', ' + 'end=' + str(end))
+        #print('domain_begin=' + str(domain_begin) + ', ' + 'domain_end=' + str(domain_end))
         return begin, end, domain_begin, domain_end
 
     def get_label_from_domain(self, domain_begin, domain_end):
@@ -68,7 +68,7 @@ class gen_line_image():
             else:
                 drawable = False
                 label = "none"
-                print('invalid line')
+                #print('invalid line')
         elif(domain_begin==1):
             if(3<=domain_end<=9):
                 drawable = True
@@ -76,7 +76,7 @@ class gen_line_image():
             else:
                 drawable = False
                 label = "none"
-                print('invalid line')
+                #print('invalid line')
         elif(domain_begin==2):
             if(4<=domain_end<=8):
                 drawable = True
@@ -87,7 +87,7 @@ class gen_line_image():
             else:
                 drawable = False
                 label = "none"
-                print('invalid line')
+                #print('invalid line')
         elif(domain_begin==3):
             if(5<=domain_end<=8):
                 drawable = True
@@ -95,7 +95,7 @@ class gen_line_image():
             else:
                 drawable = False
                 label = "none"
-                print('invalid line')
+                #print('invalid line')
         elif(domain_begin==9):
             if(4<=domain_end<=7):
                 drawable = True
@@ -103,15 +103,15 @@ class gen_line_image():
             else:
                 drawable = False
                 label = "none"
-                print('invalid line')
+                #print('invalid line')
         else:
             drawable = False
             label = "none"
-            print('invalid line')
-        print(drawable, label)
+            #print('invalid line')
+        #print(drawable, label)
         return drawable, label
 
-    def generate_image(self, W, H, domain_num_W, domain_num_H, dst_dir, csv_name, img_num, line_width, class_label):
+    def generate_image(self, W, H, domain_num_W, domain_num_H, dst_dir, csv_name, img_num, line_width, class_label, marker_type='nothing'):
         straight_num = img_num//3
         left_num = img_num//3
         right_num = img_num//3
@@ -123,6 +123,7 @@ class gen_line_image():
             straight_generated = 0
             left_generated = 0
             right_generated = 0
+            generated = 0
             while(straight_generated + left_generated + right_generated < img_num):
                 image = np.zeros((H,W,1), dtype=np.uint8)
                 image.fill(255)
@@ -137,42 +138,31 @@ class gen_line_image():
                 drawable, label = self.get_label_from_domain(domain_begin, domain_end) 
 
                 if((label=="straight") and (straight_generated < straight_num)):
-                    image = cv2.line(image, begin, end ,color, line_width)
-                    # image = cv2.line(image, begin, (end[0]+line_width, end[1]), color, line_width)
-                    # image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
-                    # image = cv2.line(image, (0,H-line_width), (W, H-line_width), color, line_width//2)
-                    # image = cv2.line(image, (line_width,0), (line_width, H), color, line_width//2)
-                    image = cv2.rectangle(image, (line_width, H-2*line_width), (2*line_width, H-line_width), color, -1)
-
-                    cv2.imwrite(dst_dir + class_label[label] + "/" + str(straight_generated) + ".png", image)
-                    writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(straight_generated) + ".png",class_label[label]])
-                    print(straight_generated)
                     straight_generated = straight_generated + 1
                 elif((label=="left") and (left_generated < left_num)):
-                    image = cv2.line(image, begin, end ,color, line_width)
-                    # image = cv2.line(image, begin, (end[0]+line_width, end[1]), color, line_width)
-                    # image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
-                    # image = cv2.line(image, (0,H-line_width), (W, H-line_width), color, line_width//2)
-                    # image = cv2.line(image, (line_width,0), (line_width, H), color, line_width//2)
-                    image = cv2.rectangle(image, (line_width, H-2*line_width), (2*line_width, H-line_width), color, -1)
-
-                    cv2.imwrite(dst_dir + class_label[label] + "/" + str(left_generated) + ".png", image)
-                    writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(left_generated) + ".png",class_label[label]])
-                    print(left_generated)
                     left_generated = left_generated + 1
                 elif((label=="right") and (right_generated < right_num)):
-                    image = cv2.line(image, begin, end ,color, line_width)
-                    # image = cv2.line(image, begin, (end[0]+line_width, end[1]), color, line_width)
-                    # image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
-                    # image = cv2.line(image, (0,H-line_width), (W, H-line_width), color, line_width//2)
-                    # image = cv2.line(image, (line_width,0), (line_width, H), color, line_width//2)
-                    image = cv2.rectangle(image, (line_width, H-2*line_width), (2*line_width, H-line_width), color, -1)
-                    
-                    cv2.imwrite(dst_dir + class_label[label] + "/" + str(right_generated) + ".png", image)
-                    writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(right_generated) + ".png",class_label[label]])
-                    print(right_generated)
                     right_generated = right_generated + 1 
-                print("-------------------------")
+                else:
+                    continue
+                
+                image = cv2.line(image, begin, end ,color, line_width)
+                if(marker_type=='nothing'):
+                    pass
+                elif(marker_type=='cross'):
+                    image = cv2.line(image, begin, (end[0]+line_width, end[1]), color, line_width)
+                    image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
+                    image = cv2.line(image, (0,H-line_width), (W, H-line_width), color, line_width//2)
+                    image = cv2.line(image, (line_width,0), (line_width, H), color, line_width//2)
+                elif(marker_type=='point'):
+                    image = cv2.rectangle(image, (line_width, H-2*line_width), (2*line_width, H-line_width), color, -1)
+                elif(marker_type=='rectangle'):
+                    image = cv2.rectangle(image, (line_width, H-3*line_width), (2*line_width, H-line_width), color, -1)
+
+                cv2.imwrite(dst_dir + class_label[label] + "/" + str(generated) + ".png", image)
+                writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(generated) + ".png",class_label[label]])
+                generated = generated + 1
+
 
 class image_generator():
     def __init__(self):
