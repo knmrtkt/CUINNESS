@@ -138,10 +138,11 @@ class gen_line_image():
 
                 if((label=="straight") and (straight_generated < straight_num)):
                     image = cv2.line(image, begin, end ,color, line_width)
-                    image = cv2.line(image, begin, (end[0]+line_width, end[1]), color, line_width)
-                    image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
-                    image = cv2.line(image, (0,H-line_width), (W, H-line_width), color, line_width//2)
-                    image = cv2.line(image, (line_width,0), (line_width, H), color, line_width//2)
+                    # image = cv2.line(image, begin, (end[0]+line_width, end[1]), color, line_width)
+                    # image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
+                    # image = cv2.line(image, (0,H-line_width), (W, H-line_width), color, line_width//2)
+                    # image = cv2.line(image, (line_width,0), (line_width, H), color, line_width//2)
+                    image = cv2.line(image, (line_width, H-line_width), (line_width, H-line_width), color, line_width)
 
                     cv2.imwrite(dst_dir + class_label[label] + "/" + str(straight_generated) + ".png", image)
                     writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(straight_generated) + ".png",class_label[label]])
@@ -149,10 +150,11 @@ class gen_line_image():
                     straight_generated = straight_generated + 1
                 elif((label=="left") and (left_generated < left_num)):
                     image = cv2.line(image, begin, end ,color, line_width)
-                    image = cv2.line(image, begin, (end[0]+line_width, end[1]), color, line_width)
-                    image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
-                    image = cv2.line(image, (0,H-line_width), (W, H-line_width), color, line_width//2)
-                    image = cv2.line(image, (line_width,0), (line_width, H), color, line_width//2)
+                    # image = cv2.line(image, begin, (end[0]+line_width, end[1]), color, line_width)
+                    # image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
+                    # image = cv2.line(image, (0,H-line_width), (W, H-line_width), color, line_width//2)
+                    # image = cv2.line(image, (line_width,0), (line_width, H), color, line_width//2)
+                    image = cv2.line(image, (line_width, H-line_width), (line_width, H-line_width), color, line_width)
 
                     cv2.imwrite(dst_dir + class_label[label] + "/" + str(left_generated) + ".png", image)
                     writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(left_generated) + ".png",class_label[label]])
@@ -160,10 +162,11 @@ class gen_line_image():
                     left_generated = left_generated + 1
                 elif((label=="right") and (right_generated < right_num)):
                     image = cv2.line(image, begin, end ,color, line_width)
-                    image = cv2.line(image, begin, (end[0]+line_width, end[1]), color, line_width)
-                    image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
-                    image = cv2.line(image, (0,H-line_width), (W, H-line_width), color, line_width//2)
-                    image = cv2.line(image, (line_width,0), (line_width, H), color, line_width//2)
+                    # image = cv2.line(image, begin, (end[0]+line_width, end[1]), color, line_width)
+                    # image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
+                    # image = cv2.line(image, (0,H-line_width), (W, H-line_width), color, line_width//2)
+                    # image = cv2.line(image, (line_width,0), (line_width, H), color, line_width//2)
+                    image = cv2.line(image, (line_width, H-line_width), (line_width, H-line_width), color, line_width)
                     
                     cv2.imwrite(dst_dir + class_label[label] + "/" + str(right_generated) + ".png", image)
                     writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(right_generated) + ".png",class_label[label]])
