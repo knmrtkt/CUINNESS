@@ -142,7 +142,7 @@ class gen_line_image():
                     # image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
                     # image = cv2.line(image, (0,H-line_width), (W, H-line_width), color, line_width//2)
                     # image = cv2.line(image, (line_width,0), (line_width, H), color, line_width//2)
-                    image = cv2.rectangle(image, (line_width, H-2*line_width), (2*line_width, H-line_width), color, line_width, thickness=-1)
+                    image = cv2.rectangle(image, (line_width, H-2*line_width), (2*line_width, H-line_width), color, -1)
 
                     cv2.imwrite(dst_dir + class_label[label] + "/" + str(straight_generated) + ".png", image)
                     writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(straight_generated) + ".png",class_label[label]])
@@ -154,7 +154,7 @@ class gen_line_image():
                     # image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
                     # image = cv2.line(image, (0,H-line_width), (W, H-line_width), color, line_width//2)
                     # image = cv2.line(image, (line_width,0), (line_width, H), color, line_width//2)
-                    image = cv2.rectangle(image, (line_width, H-2*line_width), (2*line_width, H-line_width), color, line_width, thickness=-1)
+                    image = cv2.rectangle(image, (line_width, H-2*line_width), (2*line_width, H-line_width), color, -1)
 
                     cv2.imwrite(dst_dir + class_label[label] + "/" + str(left_generated) + ".png", image)
                     writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(left_generated) + ".png",class_label[label]])
@@ -166,7 +166,7 @@ class gen_line_image():
                     # image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
                     # image = cv2.line(image, (0,H-line_width), (W, H-line_width), color, line_width//2)
                     # image = cv2.line(image, (line_width,0), (line_width, H), color, line_width//2)
-                    image = cv2.rectangle(image, (line_width, H-2*line_width), (2*line_width, H-line_width), color, line_width, thickness=-1)
+                    image = cv2.rectangle(image, (line_width, H-2*line_width), (2*line_width, H-line_width), color, -1)
                     
                     cv2.imwrite(dst_dir + class_label[label] + "/" + str(right_generated) + ".png", image)
                     writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(right_generated) + ".png",class_label[label]])
