@@ -75,8 +75,8 @@ class CifarTrainer(object):
                     loss, acc = self.__forward(x_batch, valid_y[i:batch_end], train=False)
                     valid_loss += float(loss.data) * len(x_batch)
                     valid_acc += float(acc.data) * len(x_batch)
-            #valid_loss /= 0#len(valid_x)
-            #valid_acc /= 0#len(valid_x)
+            valid_loss /= len(valid_x)
+            valid_acc /= len(valid_x)
             test_loss = 0
             test_acc = 0
             if test_x is not None and test_y is not None:
