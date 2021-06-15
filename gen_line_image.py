@@ -104,6 +104,16 @@ class gen_line_image():
                 drawable = False
                 label = "none"
                 #print('invalid line')
+        elif(domain_begin==4):
+            if(5<=domain_end<=7):
+                label = "right"
+            else:
+                label = "none"
+        elif(domain_begin==8):
+            if(5<=domain_end<=7):
+                label = "left"
+            else:
+                label = "none"
         else:
             drawable = False
             label = "none"
@@ -175,7 +185,7 @@ class gen_line_image():
                 domain_a = self.get_domain_from_coord(W, H, r_a, domain_num_W, domain_num_H)
                 domain_b = self.get_domain_from_coord(W, H, r_b, domain_num_W, domain_num_H)
                 begin, end, domain_begin, domain_end = self.begin_or_end(a, b, domain_a, domain_b)
-                label = self.get_label_from_domain(domain_begin, domain_end) 
+                label = self.get_label_from_domain_old(domain_begin, domain_end) 
 
                 if((label=="straight") and (straight_generated < straight_num)):
                     straight_generated = straight_generated + 1
