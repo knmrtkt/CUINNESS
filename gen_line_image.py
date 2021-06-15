@@ -196,7 +196,6 @@ class gen_line_image():
         
     def mark_image(self, W, H, dst_dir, line_width, color, marker_type='nothing'):
         def mark(file_path):
-            print(file_path)
             image = cv2.imread(file_path)
             if(marker_type=='nothing'):
                 pass
