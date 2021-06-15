@@ -1,0 +1,75 @@
+#-----------------------------------------------------------
+# Vivado v2019.2 (64-bit)
+# SW Build 2708876 on Wed Nov  6 21:39:14 MST 2019
+# IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+# Start of session at: Tue Jun 15 17:18:43 2021
+# Process ID: 24470
+# Current directory: /home/kanamori/CUINNESS
+# Command line: vivado
+# Log file: /home/kanamori/CUINNESS/vivado.log
+# Journal file: /home/kanamori/CUINNESS/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /home/kanamori/MNIST_nexys4ddr/project_20210611/project_20210611.xpr
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/tools/Xilinx/Vivado/2019.2/data/ip'.
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 2 -cluster_configuration slurm
+[Tue Jun 15 17:20:47 2021] Launched synth_1...
+Run output will be captured here: /home/kanamori/MNIST_nexys4ddr/project_20210611/project_20210611.runs/synth_1/runme.log
+[Tue Jun 15 17:20:48 2021] Launched impl_1...
+Run output will be captured here: /home/kanamori/MNIST_nexys4ddr/project_20210611/project_20210611.runs/impl_1/runme.log
+open_hw_manager
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:192.168.220.56:3121
+INFO: [Labtools 27-3415] Connecting to cs_server url TCP:localhost:3042
+INFO: [Labtools 27-3417] Launching cs_server...
+INFO: [Labtools 27-2221] Launch Output:
+[?1034h/bin/sh: /tmp/_MEIdpsAhj/libtinfo.so.5: no version information available (required by /bin/sh)
+
+
+****** Xilinx cs_server v2019.2.0
+  **** Build date : Nov 07 2019-14:41:48
+    ** Copyright 2017-2019 Xilinx, Inc. All Rights Reserved.
+
+
+
+connect_hw_server -url 192.168.220.56:3121 -allow_non_jtag
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:192.168.220.56:3121
+INFO: [Labtools 27-3415] Connecting to cs_server url TCP:localhost:3042
+INFO: [Labtools 27-3414] Connected to existing cs_server.
+current_hw_target [get_hw_targets */xilinx_tcf/Digilent/210292ABF1A2A]
+set_property PARAM.FREQUENCY 15000000 [get_hw_targets */xilinx_tcf/Digilent/210292ABF1A2A]
+open_hw_target
+INFO: [Labtoolstcl 44-466] Opening hw_target 192.168.220.56:3121/xilinx_tcf/Digilent/210292ABF1A2A
+set_property PROGRAM.FILE {/home/kanamori/MNIST_nexys4ddr/project_20210611/project_20210611.runs/impl_1/m_main.bit} [get_hw_devices xc7a100t_0]
+current_hw_device [get_hw_devices xc7a100t_0]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a100t_0] 0]
+INFO: [Labtools 27-1434] Device xc7a100t (JTAG device index = 0) is programmed with a design that has no supported debug core(s) in it.
+create_hw_cfgmem -hw_device [get_hw_devices xc7a100t_0] -mem_dev [lindex [get_cfgmem_parts {s25fl128sxxxxxx0-spi-x1_x2_x4}] 0]
+set_property PROGRAM.ADDRESS_RANGE  {use_file} [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.FILES [list "/home/kanamori/MNIST_nexys4ddr/project_20210611/m_main_pwm_rl.bin" ] [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.PRM_FILE {} [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.UNUSED_PIN_TERMINATION {pull-none} [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.BLANK_CHECK  0 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.ERASE  1 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.CFG_PROGRAM  1 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.VERIFY  1 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.CHECKSUM  0 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+startgroup 
+create_hw_bitstream -hw_device [lindex [get_hw_devices xc7a100t_0] 0] [get_property PROGRAM.HW_CFGMEM_BITFILE [ lindex [get_hw_devices xc7a100t_0] 0]]; program_hw_devices [lindex [get_hw_devices xc7a100t_0] 0]; refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0];
+INFO: [Labtools 27-3164] End of startup status: HIGH
+INFO: [Labtools 27-2302] Device xc7a100t (JTAG device index = 0) is programmed with a design that has 1 SPI core(s).
+program_hw_cfgmem -hw_cfgmem [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+Mfg ID : 1   Memory Type : 20   Memory Capacity : 18   Device ID 1 : 0   Device ID 2 : 0
+Performing Erase Operation...
+Erase Operation successful.
+Performing Program and Verify Operations...
+Program/Verify Operation successful.
+INFO: [Labtoolstcl 44-377] Flash programming completed successfully
+program_hw_cfgmem: Time (s): cpu = 00:00:02 ; elapsed = 00:01:30 . Memory (MB): peak = 7913.656 ; gain = 0.000 ; free physical = 26893 ; free virtual = 46611
+endgroup
+ERROR: [Labtoolstcl 44-513] HW Target shutdown. Closing target: 192.168.220.56:3121/xilinx_tcf/Digilent/210292ABF1A2A

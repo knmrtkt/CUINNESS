@@ -94,8 +94,8 @@ if __name__ == '__main__':
         images = pickle.load(f)
 
         index = np.random.permutation(len(images['train']))        
-        #threshold = np.int32(len(images['train'])/10*9)
-        threshold = np.int32(len(images['train'])-1)
+        threshold = np.int32(len(images['train'])/10*9)
+        #threshold = np.int32(len(images['train'])-1)
         train_index = index[:threshold]
         valid_index = index[threshold:]
 
