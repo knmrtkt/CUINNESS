@@ -274,6 +274,7 @@ class CUINNESS:
         print("[INFO] FINISH TRAINING")
         subprocess.run(["cp","temp.model","./" + self.projectName]) # background job = python train.py &
         subprocess.run(["cp","temp_log.csv","./" + self.projectName]) # background job = python train.py &
+        subprocess.run(["cp","build.tcl","./" + self.projectName])
         is_load_pretrain = 1
         #self.updateCanvas()
     
