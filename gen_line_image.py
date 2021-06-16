@@ -60,65 +60,46 @@ class gen_line_image():
     def get_label_from_domain_old(self, domain_begin, domain_end):
         if(domain_begin==0):
             if(4<=domain_end<=8):
-                drawable = True
                 label = "left"
             elif(domain_end==3 or domain_end==9):
-                drawable = True
                 label = "straight"
             else:
-                drawable = False
                 label = "none"
-                #print('invalid line')
         elif(domain_begin==1):
             if(3<=domain_end<=9):
-                drawable = True
                 label = "straight"
             else:
-                drawable = False
                 label = "none"
-                #print('invalid line')
         elif(domain_begin==2):
             if(4<=domain_end<=8):
-                drawable = True
                 label = "right"
             elif(domain_end==3 or domain_end==9):
-                drawable = True
                 label = "straight"
             else:
-                drawable = False
                 label = "none"
-                #print('invalid line')
         elif(domain_begin==3):
             if(5<=domain_end<=8):
-                drawable = True
                 label = "right"
             else:
-                drawable = False
                 label = "none"
-                #print('invalid line')
         elif(domain_begin==9):
             if(4<=domain_end<=7):
-                drawable = True
-                label = "left"
-            else:
-                drawable = False
-                label = "none"
-                #print('invalid line')
-        elif(domain_begin==4):
-            if(5<=domain_end<=7):
-                label = "right"
-            else:
-                label = "none"
-        elif(domain_begin==8):
-            if(5<=domain_end<=7):
                 label = "left"
             else:
                 label = "none"
+        # elif(domain_begin==4):
+        #     if(5<=domain_end<=7):
+        #         label = "right"
+        #     else:
+        #         label = "none"
+        # elif(domain_begin==8):
+        #     if(5<=domain_end<=7):
+        #         label = "left"
+        #     else:
+        #         label = "none"
         else:
-            drawable = False
             label = "none"
-            #print('invalid line')
-        #print(drawable, label)
+
         return label
 
     def get_label_from_domain(self, domain_begin, domain_end):
@@ -216,6 +197,9 @@ class gen_line_image():
                 image = cv2.rectangle(image, (line_width, H-2*line_width), (2*line_width, H-line_width), color, -1)
             elif(marker_type=='rectangle'):
                 image = cv2.rectangle(image, (line_width, H-3*line_width), (2*line_width, H-line_width), color, -1)
+            elif(marker_type=='three'):
+                image = cv2.rectangle(image, (line_width, H-2*line_width), (2*line_width, H-line_width), color, -1)
+
             cv2.imwrite(file_path, image)
 
         def recursive_file_check(path):
