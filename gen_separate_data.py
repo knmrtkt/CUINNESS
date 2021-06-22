@@ -107,8 +107,8 @@ else:
 	n_flip = 1
 
 # register all images, and normalization if needs,,,
-imageData = np.zeros((len(allData)*n_crop*n_rotate*n_flip,3,width,height))
-labelData = np.zeros(len(allData)*n_crop*n_rotate*n_flip)
+trainimageData = np.zeros((len(allData)*n_crop*n_rotate*n_flip,3,width,height))
+trainlabelData = np.zeros(len(allData)*n_crop*n_rotate*n_flip)
 
 idx = 0
 for pathAndLabel in allData:
@@ -190,17 +190,14 @@ for pathAndLabel in allData:
 				reshaped = img.transpose(2, 0, 1) # (Y,X,BGR) -> (BGR,Y,X)
 
 				# store temporary memory
-				imageData[idx] = reshaped #bench
-				labelData[idx] = np.int32(pathAndLabel[1])
+				trainimageData[idx] = reshaped #bench
+				trainlabelData[idx] = np.int32(pathAndLabel[1])
 
 				idx = idx + 1
 
-imageData = imageData.astype(np.uint8)
+trainimageData = trainimageData.astype(np.uint8)
 
-image = {}
-label = {}
-image['train'] = imageData[0:]
-label['train'] = labelData[0:]
+
 
 ## test
 
@@ -249,8 +246,8 @@ else:
 	n_flip = 1
 
 # register all images, and normalization if needs,,,
-imageData = np.zeros((len(allData)*n_crop*n_rotate*n_flip,3,width,height))
-labelData = np.zeros(len(allData)*n_crop*n_rotate*n_flip)
+testimageData = np.zeros((len(allData)*n_crop*n_rotate*n_flip,3,width,height))
+testlabelData = np.zeros(len(allData)*n_crop*n_rotate*n_flip)
 
 idx = 0
 for pathAndLabel in allData:
@@ -332,15 +329,20 @@ for pathAndLabel in allData:
 				reshaped = img.transpose(2, 0, 1) # (Y,X,BGR) -> (BGR,Y,X)
 
 				# store temporary memory
-				imageData[idx] = reshaped #bench
-				labelData[idx] = np.int32(pathAndLabel[1])
+				testimageData[idx] = reshaped #bench
+				testlabelData[idx] = np.int32(pathAndLabel[1])
 
 				idx = idx + 1
 
-imageData = imageData.astype(np.uint8)
+testimageData = testimageData.astype(np.uint8)
 
-image['test'] = imageData[0:]
-label['test'] = labelData[0:]
+image = {}
+label = {}
+image['train'] = trainimageData
+label['train'] = trainlabelData
+
+image['test'] = testimageData
+label['test'] = testlabelData
 
 print("[INFO] SAVE %s as an image dataset" % dataset_fname)
 with open(dataset_fname, mode='wb') as f:
