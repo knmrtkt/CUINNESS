@@ -199,8 +199,8 @@ imageData = imageData.astype(np.uint8)
 
 image = {}
 label = {}
-image['train'] = imageData
-label['train'] = labelData
+image['train'] = imageData[0:]
+label['train'] = labelData[0:]
 
 ## test
 
@@ -339,8 +339,8 @@ for pathAndLabel in allData:
 
 imageData = imageData.astype(np.uint8)
 
-image['test'] = imageData
-label['test'] = labelData
+image['test'] = imageData[0:]
+label['test'] = labelData[0:]
 
 print("[INFO] SAVE %s as an image dataset" % dataset_fname)
 with open(dataset_fname, mode='wb') as f:
