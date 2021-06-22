@@ -91,7 +91,7 @@ if __name__ == '__main__':
     conf_matrix = np.zeros((n_class,n_class))
 
     # specify the number of tests
-    n_tests = args.testnum
+    n_tests = len(test_x)#args.testnum
     n_acc   = 0
 
     # perform test
@@ -108,9 +108,9 @@ if __name__ == '__main__':
 # you can comment out following to generate more test bech for C/C++ simulation in the Vivado HLS, and an FPGA board
 #        '''
         bench_img = image1.reshape(-1,)
-        fname = 'test_img_%d.txt' % idx # + str(idx) + '.txt'
-        print(' Test Image Fileout -> %s' % fname)
-        np.savetxt(fname, bench_img, fmt="%.0f", delimiter=",")
+        #fname = 'test_img_%d.txt' % idx # + str(idx) + '.txt'
+        #print(' Test Image Fileout -> %s' % fname)
+        #np.savetxt(fname, bench_img, fmt="%.0f", delimiter=",")
 
         if idx == 0:
             fname = 'HLS/test_img_%d.txt' % idx # + str(idx) + '.txt'
@@ -128,8 +128,8 @@ if __name__ == '__main__':
         #cv2.imshow("test image", image1)
         #cv2.waitKey(0)
         #cv2.destroyAllWindows()
-        pil_img = Image.fromarray(image1)
-        pil_img.save('test_img_%d.png'  %idx)
+        #pil_img = Image.fromarray(image1)
+        #pil_img.save('test_img_%d.png'  %idx)
 
         # regist a confusion matrix
         conf_matrix[test_y[idx],result.data.argmax()] = conf_matrix[test_y[idx],result.data.argmax()] + 1
