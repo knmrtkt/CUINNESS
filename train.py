@@ -76,6 +76,8 @@ if __name__ == '__main__':
                         help='Prefix of model parameter files for the GUINNESS flow')
     parser.add_argument('--resume', type=str, default='no',
                         help='Resume traning, if pre-trained model exists')
+    parser.add_argument('--valid', type=str, default='no',
+                        help='except validation data')
     args = parser.parse_args()
 
     np.random.seed(args.seed)
@@ -95,8 +97,11 @@ if __name__ == '__main__':
 
         index = np.random.permutation(len(images['train']))        
         threshold = np.int32(len(images['train'])/10*9)
-        #threshold = np.int32(len(images['train'])-1)
-        train_index = index[:threshold]
+        if(args.valid=='yes'):
+            train_index = index[:threshold]
+        else:
+            train_index = index
+        
         valid_index = index[threshold:]
 
         train_x = images['train'][train_index].astype(np.float32)
