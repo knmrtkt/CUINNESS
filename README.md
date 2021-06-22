@@ -1,6 +1,7 @@
 # GUINNESS: A GUI based binarized Neural NEtwork SyntheSizer toward an FPGA (Trial version)
 
-- [Open with Colab](https://colab.research.google.com/github/knmrtkt/CUINNESS/blob/master/colnness.ipynb)
+- [Open linetrace with Colab](https://colab.research.google.com/github/knmrtkt/CUINNESS/blob/master/colnness.ipynb)
+- [Open typical dataset demo with Colab](https://colab.research.google.com/github/knmrtkt/CUINNESS/blob/master/demo.ipynb)
 
 This GUI based framework includes both a training on a GPU, and a bitstream generation for an FPGA using the Xilinx Inc. SDSoC. This tool uses the Chainer deep learning framework to train a binarized CNN. Also, it uses optimization techniques for an FPGA implementation. Details are shown in following papers:
 
