@@ -95,12 +95,11 @@ if __name__ == '__main__':
     with open(args.dataset, 'rb') as f:
         images = pickle.load(f)
 
-        index = np.random.permutation(len(images['train']))        
-        if(args.valid=='yes'):
-            threshold = np.int32(len(images['train'])/10*9)
+        index = np.random.permutation(len(images['train']))
+        threshold = np.int32(len(images['train'])/10*9)        
+        if(args.valid=='yes'):    
             train_index = index[:threshold]
         else:
-            threshold = np.int32(len(images['train'])/100*99)
             train_index = index
         
         valid_index = index[threshold:]

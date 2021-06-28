@@ -148,6 +148,11 @@ class gen_line_image():
         right_num = img_num//3
         for dir_no in class_label.values():
             os.makedirs(dst_dir + dir_no, exist_ok=True)
+        os.makedirs(dst_dir + str(len(class_label)), exist_ok=True)
+        for i in range(img_num//3):
+            image = np.zeros((H,W,1), dtype=np.uint8)
+            image.fill(255)
+            cv2.imwrite(dst_dir + str(len(class_label)) + "/" + str(i) + ".png", image)
         with open(dst_dir + csv_name, 'w') as f:
             writer = csv.writer(f)
             writer.writerow(['path','label'])
