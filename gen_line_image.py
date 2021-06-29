@@ -1,197 +1,108 @@
 import os
-import sys
-import math
 import csv
-import pprint
-import pandas as pd
 import cv2
-import glob
 import numpy as np
-import matplotlib.pyplot as plt
-import datetime
-from IPython.display import SVG
 
 class gen_line_image():
     def __init__(self):
         pass
     def generate_point(self, W, H, r):
         if(0 <= r < W):
-            x =  r
-            y = 0
+            return r, 0
         elif(0 <= r< (W+H)):
-            x = W
-            y = r-W
+            return W, r-W
         elif((W+H) <= r < (2*W+H)):
-            x = (2*W+H)-r
-            y = W
+            return (2*W+H)-r, W
         elif((2*W+H) <= r < (2*W+2*H)):
-            x = 0
-            y = (2*W+2*H)-r
-        else:
-          print("Error")
-        return x, y
+            return 0, (2*W+2*H)-r
+        return 0,0
 
     def get_domain_from_coord(self, W, H, r, domain_num_W, domain_num_H):
         if(0 <= r < W):
-            domain = int(r/(W/domain_num_W))
+            return int(r/(W/domain_num_W))
         elif(0 <= r < (W + H)):
-            domain = domain_num_W + int((r-W)/(W/domain_num_H))
+            return domain_num_W + int((r-W)/(W/domain_num_H))
         elif((W + H) <= r < (2*W + H)):
-            domain = domain_num_W + domain_num_H + int((r-W-H)/(W/domain_num_W))
+            return domain_num_W + domain_num_H + int((r-W-H)/(W/domain_num_W))
         else:
-            domain = 2*domain_num_W + domain_num_H + int((r-2*W-H)/(H/domain_num_H))
-        return domain
+            return 2*domain_num_W + domain_num_H + int((r-2*W-H)/(H/domain_num_H))
 
     def begin_or_end(self, a, b, domain_a, domain_b):
-        if(a[1] <= b[1]):
-              begin = a
-              end = b
-              domain_begin = domain_a
-              domain_end = domain_b 
-        else:
-            begin = b
-            end = a
-            domain_begin = domain_b
-            domain_end = domain_a 
-        #print('begin=' + str(begin) + ', ' + 'end=' + str(end))
-        #print('domain_begin=' + str(domain_begin) + ', ' + 'domain_end=' + str(domain_end))
-        return begin, end, domain_begin, domain_end
-
-    def get_label_from_domain_old(self, domain_begin, domain_end):
-        if(domain_begin==0):
-            if(4<=domain_end<=8):
-                label = "left"
-            elif(domain_end==3 or domain_end==9):
-                label = "straight"
-            else:
-                label = "none"
-        elif(domain_begin==1):
-            if(3<=domain_end<=9):
-                label = "straight"
-            else:
-                label = "none"
-        elif(domain_begin==2):
-            if(4<=domain_end<=8):
-                label = "right"
-            elif(domain_end==3 or domain_end==9):
-                label = "straight"
-            else:
-                label = "none"
-        elif(domain_begin==3):
-            if(5<=domain_end<=8):
-                label = "right"
-            else:
-                label = "none"
-        elif(domain_begin==9):
-            if(4<=domain_end<=7):
-                label = "left"
-            else:
-                label = "none"
-        # elif(domain_begin==4):
-        #     if(5<=domain_end<=7):
-        #         label = "right"
-        #     else:
-        #         label = "none"
-        # elif(domain_begin==8):
-        #     if(5<=domain_end<=7):
-        #         label = "left"
-        #     else:
-        #         label = "none"
-        else:
-            label = "none"
-
-        return label
+        if(a[1] > b[1]):
+            a, b = b, a
+            domain_a, domain_b = domain_b, domain_a
+        return a, b, domain_a, domain_b
 
     def get_label_from_domain(self, domain_begin, domain_end):
-            if(domain_begin==1):
-                if(3<=domain_end<=9):
-                  label = "straight"
-                else: 
-                  label = "none"
-            elif(domain_begin==2):
-                if(3<=domain_end<=9):
-                  label = "right"
-                else: 
-                  label = "none"
-            elif(domain_begin==3):
-                if(5<=domain_end<=8):
-                  label = "right"
-                else: 
-                  label = "none"              
-            elif(domain_begin==4):
-                if(5<=domain_end<=8):
-                  label = "right"
-                else: 
-                  label = "none"              
-            elif(domain_begin==0):
-                if(3<=domain_end<=9):
-                  label = "left"
-                else: 
-                  label = "none"              
-            elif(domain_begin==9):
-                if(4<=domain_end<=7):
-                  label = "left"
-                else: 
-                  label = "none"              
-            elif(domain_begin==8):
-                if(4<=domain_end<=7):
-                  label = "left"
-                else: 
-                  label = "none"
-            else:
-              label = "none"      
-            return label
+        if(domain_begin==0):
+            if(4<=domain_end<=8):
+                return "left"
+            elif(domain_end==3 or domain_end==9):
+                return "straight"
+        elif(domain_begin==1):
+            if(3<=domain_end<=9):
+                return "straight"
+        elif(domain_begin==2):
+            if(4<=domain_end<=8):
+                return "right"
+            elif(domain_end==3 or domain_end==9):
+                return "straight"
+        elif(domain_begin==3):
+            if(5<=domain_end<=8):
+                return "right"
+        elif(domain_begin==9):
+            if(4<=domain_end<=7):
+                return "left"
+        return "none"
 
     def generate_image(self, W, H, domain_num_W, domain_num_H, dst_dir, csv_name, img_num, line_width, class_label):
-        straight_num = img_num//3
-        left_num = img_num//3
-        right_num = img_num//3
+        ## threshold for excepting short line
+        th = (W//2)**2
+        color=0
+        ## generate directory
         for dir_no in class_label.values():
             os.makedirs(dst_dir + dir_no, exist_ok=True)
+        ## generate blank image
         os.makedirs(dst_dir + str(len(class_label)), exist_ok=True)
-        for i in range(img_num//3):
+        for i in range(img_num//len(class_label)):
             image = np.zeros((H,W,1), dtype=np.uint8)
             image.fill(255)
             cv2.imwrite(dst_dir + str(len(class_label)) + "/" + str(i) + ".png", image)
+        ## generate line image
         with open(dst_dir + csv_name, 'w') as f:
             writer = csv.writer(f)
             writer.writerow(['path','label'])
-            straight_generated = 0
-            left_generated = 0
-            right_generated = 0
-            generated = 0
-            while(straight_generated + left_generated + right_generated < img_num):
+            generated = {}
+            for label in class_label:
+                generated[label] = 0
+            while(sum(generated.values()) < img_num):
                 image = np.zeros((H,W,1), dtype=np.uint8)
                 image.fill(255)
-                color=0
                 r_a = np.random.randint(0, 2*W + 2*H)
                 r_b = np.random.randint(0, 2*W + 2*H)
                 a = self.generate_point(W, H, r_a)
-                b = self.generate_point(W, H, r_b,)
+                b = self.generate_point(W, H, r_b)
                 domain_a = self.get_domain_from_coord(W, H, r_a, domain_num_W, domain_num_H)
                 domain_b = self.get_domain_from_coord(W, H, r_b, domain_num_W, domain_num_H)
                 begin, end, domain_begin, domain_end = self.begin_or_end(a, b, domain_a, domain_b)
-                label = self.get_label_from_domain_old(domain_begin, domain_end) 
-
-                if((label=="straight") and (straight_generated < straight_num)):
-                    straight_generated = straight_generated + 1
-                elif((label=="left") and (left_generated < left_num)):
-                    left_generated = left_generated + 1
-                elif((label=="right") and (right_generated < right_num)):
-                    right_generated = right_generated + 1 
-                else:
+                label = self.get_label_from_domain(domain_begin, domain_end)
+                if((begin[0]-end[0])**2 + (begin[1]-end[1])**2 < th or label == 'none'):
                     continue
+                if(generated[label] < img_num//len(class_label)):
+                    generated[label] = generated[label] + 1
                 
                 image = cv2.line(image, begin, end ,color, line_width)
-                image = cv2.line(image, begin, (end[0]+line_width, end[1]), color, line_width)
-                image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
+                ## thick line
+                image = cv2.line(image, begin, (end[0]+line_width//2, end[1]), color, line_width)
+                image = cv2.line(image, begin, (end[0]-line_width//2, end[1]), color, line_width)
                 
-                cv2.imwrite(dst_dir + class_label[label] + "/" + str(generated) + ".png", image)
+                cv2.imwrite(dst_dir + class_label[label] + "/" + str(generated[label]) + ".png", image)
                 writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(generated) + ".png",class_label[label]])
-                generated = generated + 1
-        
+
     def mark_image(self, W, H, dst_dir, line_width, color, marker_type='nothing'):
         def mark(file_path):
+            if(os.path.basename(file_path).split('.', 1)[1] != 'png'):
+                return
             image = cv2.imread(file_path)
             if(marker_type=='nothing'):
                 pass
@@ -217,91 +128,12 @@ class gen_line_image():
 
         recursive_file_check(dst_dir)
         
+def main():
+    ImageSize = 32
+    img_num = 90
+    img_gen = gen_line_image()
+    img_gen.generate_image(ImageSize, ImageSize, 3, 2, 'linetrace/', 'dataset.csv', img_num, 4, {"straight" : "0", "right" : "1", "left" : "2",})
+    img_gen.mark_image(ImageSize, ImageSize, 'linetrace', 4, 0, marker_type='cross')
 
-            
-            
-
-
-
-class image_generator():
-    def __init__(self):
-        pass
-    def write_straight(self, image, width, height, color, line_width, direction="straight", grad_range=(40, 45, 3)):
-        if(direction=="straight"):
-            grad  = np.random.randint(-grad_range[2],grad_range[2]+1)
-            begin = (np.random.randint(line_width,width-line_width), 0)
-            end   = (int(math.tan(math.radians(grad))*height) + begin[0], height) 
-        elif(direction=="right"):
-            grad = np.random.randint(-grad_range[1],-grad_range[0]+1)
-            rand = np.random.randint(line_width*3,width+height-line_width*3)
-            if(rand < width):
-                begin = (rand, 0)
-                end   = (int(math.tan(math.radians(grad))*height) + begin[0], height)
-            else:
-                begin = (width, rand-width)
-                end   = (width + int(math.tan(math.radians(grad))*(height-begin[1])), height)
-        elif(direction=="left"):
-            grad = np.random.randint(grad_range[0],grad_range[1]+1)
-            rand = np.random.randint(line_width*3,width+height-line_width*3)
-            if(rand < width):
-                begin = (width-rand, 0)
-                end   = (int(math.tan(math.radians(grad))*(height)+begin[0]), height)
-            else:
-                begin = (0, rand-width)
-                end   = (int(math.tan(math.radians(grad))*(height-begin[1])), height)
-        else:
-            print("error: should specify the direction in write_straight()")
-            return
-        image = cv2.line(image, begin, end, color, line_width)
-        image = cv2.line(image, begin, (end[0]+line_width, end[1]), color, line_width)
-        image = cv2.line(image, begin, (end[0]-line_width, end[1]), color, line_width)
-        image = cv2.line(image, (0,height-line_width), (width, height-line_width), color, line_width//2)
-        image = cv2.line(image, (line_width,0), (line_width, height), color, line_width//2)
-        return image
-        
-    def write_curve(self, image, width, height, color, line_width, direction="right"):
-        while(1):
-            rand = np.random.randint(line_width*2,height-line_width/2)
-            axes = (rand, np.random.randint(rand-line_width*2, rand+line_width*2))
-            norm = int(math.sqrt((axes[0])**2 + (axes[1])**2))
-            if(norm > width/2):
-                break
-        if(direction == "right"):
-            center = (width,height)
-        elif(direction == "left"):
-            center = (0,height)
-        else:
-            print("error: should specify the direction in write_curve()")
-            return
-        
-        angle = np.random.randint(-5,6)
-        image = cv2.ellipse(image,center,axes,angle,0,360,color,line_width)
-        return image
-
-    def generate_dataset(self, dst_dir, width=30, height=30, line_width=4, img_num=50, class_label={"straight" : "0", "right_straight" : "1", "left_straight" : "2", "right_curve" : "3","left_curve" : "4",}):
-        for dir_no in class_label.values():
-            os.makedirs(dst_dir + dir_no, exist_ok=True)
-        with open(dst_dir + 'dataset.csv', 'w') as f:
-            writer = csv.writer(f)
-            writer.writerow(['path','label'])
-            for label in class_label:
-                j=0
-                while(j<img_num):
-                    image = np.zeros((height,width,1), dtype=np.uint8)
-                    image.fill(255)
-                    color=0
-                    if(label=="straight"):
-                        image = self.write_straight(image, width, height, color, line_width, "straight")
-                    elif(label=="right_straight"):
-                        image = self.write_straight(image, width, height, color, line_width, "right")
-                    elif(label=="left_straight"):
-                        image = self.write_straight(image, width, height, color, line_width, "left")
-                    elif(label=="right_curve"):
-                        image = self.write_curve(image, width, height, color, line_width, "right")
-                    elif(label=="left_curve"):
-                        image = self.write_curve(image, width, height, color, line_width, "left")
-                    else:
-                        print("Unknown Class")
-                    cv2.imwrite(dst_dir + class_label[label] + "/" + str(j) + ".png", image)
-                    writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(j) + ".png",class_label[label]])
-                    j = j+1
+if __name__ == "__main__":
+    main()
