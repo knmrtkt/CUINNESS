@@ -63,11 +63,11 @@ class gen_line_image():
         for dir_no in class_label.values():
             os.makedirs(dst_dir + dir_no, exist_ok=True)
         ## generate blank image
-        os.makedirs(dst_dir + str(len(class_label)), exist_ok=True)
-        for i in range(img_num//len(class_label)):
-            image = np.zeros((H,W,1), dtype=np.uint8)
-            image.fill(255)
-            cv2.imwrite(dst_dir + str(len(class_label)) + "/" + str(i) + ".png", image)
+        # os.makedirs(dst_dir + str(len(class_label)), exist_ok=True)
+        # for i in range(img_num//len(class_label)):
+        #     image = np.zeros((H,W,1), dtype=np.uint8)
+        #     image.fill(255)
+        #     cv2.imwrite(dst_dir + str(len(class_label)) + "/" + str(i) + ".png", image)
         ## generate line image
         with open(dst_dir + csv_name, 'w') as f:
             writer = csv.writer(f)
