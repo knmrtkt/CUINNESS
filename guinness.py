@@ -41,18 +41,20 @@ is_load_pretrain = 0
 
 #class Layout(QtGui.QWidget):
 class CUINNESS:
-    def __init__(self, projectName, td_label, tl_label, epoch, netName='VGG9ave', optimizer='Adam', useGPU=True, board='zed'):
+    def __init__(self, projectName, td_label, tl_label, epoch, netName='VGG9ave', optimizer='Adam', useGPU=True, board='zed', batchSize='100'):
         super(CUINNESS,self).__init__()
 
         global is_load_pretrain
         global n_dim # BGR color image
         global img_siz # 32x32 image
         global n_class # #classes
+        global batch_size
         
         is_load_pretrain = 0
         n_dim = 3
         img_siz = 32
         n_class = 10
+        batch_size = batchSize
 
         self.projectName = projectName
         self.td_label = td_label
@@ -868,10 +870,11 @@ def main():
     parser.add_argument('projectName', help='Project Name')
     parser.add_argument('dataset', help='Dataset Name')
     parser.add_argument('epoch', help='epoch')
-    parser.add_argument('--netName', default='VGG9ave', help='netName') 
+    parser.add_argument('--netName', default='VGG9ave', help='netName')
+    parser.add_argument('--batchSize', default=100, help='batch size') 
 
     args = parser.parse_args()
-    CUINNESS(args.projectName, args.dataset+'_dataset.pkl', args.dataset+'_label.pkl', args.epoch, netName=args.netName)
+    CUINNESS(args.projectName, args.dataset+'_dataset.pkl', args.dataset+'_label.pkl', args.epoch, netName=args.netName, batchSize=str(args.batchSize))
 if __name__ == "__main__":
     main()
 
