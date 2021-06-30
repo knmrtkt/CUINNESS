@@ -70,7 +70,7 @@ class CifarTrainer(object):
                         batch_end = len(valid_x)
                     else:
                         batch_end = i + batch_size
-                    print("-> epoch = "+str(epoch)+", i (valid) : start = "+str(i)+", end = "+str(batch_end))
+                    print("\r-> epoch = "+str(epoch)+", i (valid) : start = "+str(i)+", end = "+str(batch_end))
                     x_batch = valid_x[i:batch_end]
                     loss, acc = self.__forward(x_batch, valid_y[i:batch_end], train=False)
                     valid_loss += float(loss.data) * len(x_batch)
@@ -87,7 +87,7 @@ class CifarTrainer(object):
                         batch_end = len(test_x)
                     else:
                         batch_end = i + batch_size
-                    print("-> epoch = "+str(epoch)+", i (test) : start = "+str(i)+", end = "+str(batch_end))
+                    print("\r-> epoch = "+str(epoch)+", i (test) : start = "+str(i)+", end = "+str(batch_end))
                     x_batch = test_x[i:batch_end]
                     loss, acc = self.__forward(x_batch, test_y[i:batch_end], train=False)
                     test_loss += float(loss.data) * len(x_batch)
