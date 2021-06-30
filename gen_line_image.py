@@ -86,11 +86,9 @@ class gen_line_image():
                 domain_b = self.get_domain_from_coord(W, H, r_b, domain_num_W, domain_num_H)
                 begin, end, domain_begin, domain_end = self.begin_or_end(a, b, domain_a, domain_b)
                 label = self.get_label_from_domain(domain_begin, domain_end)
-                if((begin[0]-end[0])**2 + (begin[1]-end[1])**2 < th or label == 'none'):
+                ## except none label image and extreamly short line
+                if(label == 'none' or (begin[0]-end[0])**2 + (begin[1]-end[1])**2 < th):
                     continue
-                if(generated[label] < img_num//len(class_label)):
-                    generated[label] = generated[label] + 1
-                
                 image = cv2.line(image, begin, end ,color, line_width)
                 ## thick line
                 image = cv2.line(image, begin, (end[0]+line_width//2, end[1]), color, line_width)
@@ -98,6 +96,9 @@ class gen_line_image():
                 
                 cv2.imwrite(dst_dir + class_label[label] + "/" + str(generated[label]) + ".png", image)
                 writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(generated) + ".png",class_label[label]])
+
+                if(generated[label] < img_num//len(class_label)):
+                    generated[label] = generated[label] + 1
 
     def mark_image(self, W, H, dst_dir, line_width, color, marker_type='nothing'):
         def mark(file_path):
