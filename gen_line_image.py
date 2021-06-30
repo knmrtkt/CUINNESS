@@ -95,7 +95,7 @@ class gen_line_image():
                 image = cv2.line(image, begin, (end[0]-line_width//2, end[1]), color, line_width)
                 
                 cv2.imwrite(dst_dir + class_label[label] + "/" + str(generated[label]) + ".png", image)
-                writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(generated) + ".png",class_label[label]])
+                writer.writerow(['./'+dst_dir +class_label[label] + "/" + str(generated[label]) + ".png",class_label[label]])
                 generated[label] = generated[label] + 1
 
     def mark_image(self, W, H, dst_dir, line_width, color, marker_type='nothing'):
