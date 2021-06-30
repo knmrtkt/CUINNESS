@@ -44,7 +44,7 @@ class CifarTrainer(object):
                     batch_end = len(x)
                 else:
                     batch_end = i + batch_size
-                print("-> epoch = "+str(epoch)+", i (train) : start = "+str(i)+", end = "+str(batch_end))
+                print("\r-> epoch = "+str(epoch)+", i (train) : start = "+str(i)+", end = "+str(batch_end))
                 self.net.zerograds()
                 batch_index = perm[i:batch_end]
                 x_batch = self.__trans_image(x[batch_index], img_siz, img_dim)
