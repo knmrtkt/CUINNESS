@@ -165,7 +165,7 @@ if __name__ == '__main__':
 
     cifar_trainer = trainer.CifarTrainer(cifar_net, optimizer, args.iter, args.batch_size, args.gpu)
 
-    state = {'best_valid_error': 100, 'best_test_error': 100, 'clock': time.clock()}
+    state = {'best_valid_error': 100, 'best_test_error': 100, 'clock': time.perf_counter()}#time.clock()}
     def on_epoch_done(epoch, n, o, loss, acc, valid_loss, valid_acc, test_loss, test_acc):
         error = 100 * (1 - acc)
         valid_error = 100 * (1 - valid_acc)
@@ -193,7 +193,7 @@ if __name__ == '__main__':
                 o.alpha *= 0.1
             else:
                 o.lr *= 0.1
-        clock = time.clock()
+        clock = time.perf_counter()#time.clock()
         print('elapsed time: {}'.format(clock - state['clock']))
         state['clock'] = clock
         
