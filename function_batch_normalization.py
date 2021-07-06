@@ -1,17 +1,16 @@
 import numpy
 
-import cupy
-from cupy import cuda
-#from chainer import cupy.cuda
 from chainer import function
 from chainer.utils import type_check
 
-#if cuda.cudnn_enabled:
-if True:
+try:
+    import cupy
+    from cupy import cuda
     cudnn = cuda.cudnn
-    #libcudnn = cudnn.cudnn
     libcudnn = cudnn
     _cudnn_version = libcudnn.getVersion()
+except ImportError:
+    print("no cuda")
 
 
 def _as4darray(arr):
