@@ -174,11 +174,18 @@ if __name__ == '__main__':
         print('train loss: {} error: {}'.format(loss, error))
         print('valid loss: {} error: {}'.format(valid_loss, valid_error))
         print('test  loss: {} error: {}'.format(test_loss, test_error))
-        if valid_error < state['best_valid_error']:
-            serializers.save_npz('{}.model'.format(model_prefix), n)
-            serializers.save_npz('{}.state'.format(model_prefix), o)
-            state['best_valid_error'] = valid_error
-            state['best_test_error'] = test_error
+        if(args.valid=='yes'):
+            if valid_error < state['best_valid_error']:
+                serializers.save_npz('{}.model'.format(model_prefix), n)
+                serializers.save_npz('{}.state'.format(model_prefix), o)
+                state['best_valid_error'] = valid_error
+                state['best_test_error'] = test_error
+        else:
+            if test_error < state['best_test_error']:
+                serializers.save_npz('{}.model'.format(model_prefix), n)
+                serializers.save_npz('{}.state'.format(model_prefix), o)
+                state['best_valid_error'] = valid_error
+                state['best_test_error'] = test_error
         if args.save_iter > 0 and (epoch + 1) % args.save_iter == 0:
             serializers.save_npz('{}_{}.model'.format(model_prefix, epoch + 1), n)
             serializers.save_npz('{}_{}.state'.format(model_prefix, epoch + 1), o)
