@@ -1,11 +1,14 @@
 import numpy
 
-import cupy
-from cupy import cuda
-#from chainer import cupy.cuda
+
 from chainer import function
 from chainer.utils import type_check
-
+try:
+    import cupy
+    from cupy import cuda
+except ImportError:
+    print("no cuda")
+    
 def _kern():
     # return cuda.elementwise(
     #     'T x', 'T y',

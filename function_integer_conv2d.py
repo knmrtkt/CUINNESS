@@ -1,12 +1,25 @@
 import numpy
 from six import moves
 
-import cupy
-from cupy import cuda
-#from chainer import cupy.cuda
 from chainer import function
 from chainer.utils import conv
 from chainer.utils import type_check
+
+try:
+    import cupy
+    from cupy import cuda
+    cudnn = cuda.cudnn
+    #libcudnn = cuda.cudnn.cudnn
+    libcudnn = cuda.cudnn
+    _cudnn_version = libcudnn.getVersion()
+    _fwd_pref = libcudnn.CUDNN_CONVOLUTION_FWD_SPECIFY_WORKSPACE_LIMIT
+    if _cudnn_version >= 4000:
+        _bwd_filter_pref = \
+            libcudnn.CUDNN_CONVOLUTION_BWD_FILTER_SPECIFY_WORKSPACE_LIMIT
+        _bwd_data_pref = \
+            libcudnn.CUDNN_CONVOLUTION_BWD_DATA_SPECIFY_WORKSPACE_LIMIT
+except ImportError:
+    print("no cuda")
 
 def _kern():
     # return cuda.elementwise(
@@ -25,18 +38,6 @@ def _as_mat(x):
         return x
     return x.reshape(len(x), -1)
 
-if True:
-#if cuda.cudnn_enabled:
-    cudnn = cuda.cudnn
-    #libcudnn = cuda.cudnn.cudnn
-    libcudnn = cuda.cudnn
-    _cudnn_version = libcudnn.getVersion()
-    _fwd_pref = libcudnn.CUDNN_CONVOLUTION_FWD_SPECIFY_WORKSPACE_LIMIT
-    if _cudnn_version >= 4000:
-        _bwd_filter_pref = \
-            libcudnn.CUDNN_CONVOLUTION_BWD_FILTER_SPECIFY_WORKSPACE_LIMIT
-        _bwd_data_pref = \
-            libcudnn.CUDNN_CONVOLUTION_BWD_DATA_SPECIFY_WORKSPACE_LIMIT
 
 
 def _check_cudnn_acceptable_type(x_dtype, W_dtype):
